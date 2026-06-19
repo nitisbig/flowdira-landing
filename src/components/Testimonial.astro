@@ -1,0 +1,140 @@
+---
+import BrandMark from "./BrandMark.astro";
+---
+
+<section class="quote section" aria-label="Client testimonial">
+  <div class="container">
+    <figure class="quote__card" data-reveal>
+      <span class="quote__mark" aria-hidden="true">&ldquo;</span>
+
+      <blockquote class="quote__text">
+        Flowdira redesigned our site and wired in an AI assistant in three
+        weeks. It's <em class="serif-italic">faster</em>, it converts better,
+        and the GitHub-to-Vercel workflow means we ship updates ourselves in
+        minutes.
+      </blockquote>
+
+      <figcaption class="quote__foot">
+        <div class="quote__author">
+          <span class="quote__avatar" aria-hidden="true"></span>
+          <div>
+            <p class="quote__name">Maya Okafor</p>
+            <p class="quote__role">Co-founder &amp; CEO, Lumen AI</p>
+          </div>
+        </div>
+
+        <div class="quote__result">
+          <span class="quote__spark"><BrandMark size={16} /></span>
+          <div>
+            <p class="quote__big">+62%</p>
+            <p class="quote__small">signups in 30 days</p>
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .quote__card {
+    position: relative;
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: clamp(2.25rem, 5vw, 4rem);
+    border-radius: var(--r-xl);
+    background:
+      radial-gradient(80% 100% at 0% 0%, rgba(201, 168, 106, 0.12), transparent 55%),
+      var(--paper-raised);
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-float);
+  }
+
+  .quote__mark {
+    position: absolute;
+    top: 0.4rem;
+    left: clamp(1.5rem, 4vw, 3rem);
+    font-family: var(--font-display);
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--gold);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .quote__text {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 480;
+    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .quote__text em {
+    color: var(--forest);
+  }
+
+  .quote__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .quote__author {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .quote__avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #c9a86a, #6b4f2a);
+    border: 2px solid var(--paper);
+    box-shadow: var(--shadow-card);
+  }
+  .quote__name {
+    font-weight: 620;
+    letter-spacing: -0.01em;
+  }
+  .quote__role {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .quote__result {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.1rem 0.6rem 0.6rem;
+    border-radius: var(--r-pill);
+    background: var(--forest);
+    color: var(--on-forest);
+  }
+  .quote__spark {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--forest-deep);
+  }
+  .quote__big {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .quote__small {
+    font-size: 0.74rem;
+    color: var(--on-forest-mut);
+  }
+</style>

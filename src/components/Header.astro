@@ -1,0 +1,335 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+const links = [
+  { label: "Services", href: "#services" },
+  { label: "Work", href: "#work" },
+  { label: "Process", href: "#process" },
+  { label: "Studio", href: "#studio" },
+];
+---
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a href="#main" class="brand" aria-label="Flowdira — home">
+      <span class="brand__mark"><BrandMark size={22} /></span>
+      <span class="brand__name">Flowdira</span>
+      <span class="brand__badge">studio</span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      {
+        links.map((l) => (
+          <a class="nav__link" href={l.href}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__mail link-underline" href="mailto:hello@flowdira.com">
+        hello@flowdira.com
+      </a>
+      <a class="btn header__cta" href="#contact">
+        Start a project
+        <span class="btn__arrow">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M4 12L12 4M12 4H6M12 4V10"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+      </a>
+      <button class="header__burger" aria-label="Open menu" data-menu-open>
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile sheet -->
+<div class="sheet" data-sheet hidden>
+  <div class="sheet__panel">
+    <button class="sheet__close" aria-label="Close menu" data-menu-close>
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M6 6l12 12M18 6L6 18"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"></path>
+      </svg>
+    </button>
+    <nav class="sheet__nav" aria-label="Mobile">
+      {
+        links.map((l) => (
+          <a href={l.href} data-menu-close>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+    <a class="btn btn--block" href="#contact" data-menu-close>
+      Start a project
+      <span class="btn__arrow">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M4 12L12 4M12 4H6M12 4V10"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </span>
+    </a>
+    <a class="sheet__mail" href="mailto:hello@flowdira.com">hello@flowdira.com</a>
+  </div>
+</div>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+      box-shadow 0.4s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+
+  .header.is-scrolled {
+    background: color-mix(in srgb, var(--paper) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border-bottom-color: var(--hairline);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 4.75rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 0.7rem;
+    background: var(--forest);
+    color: var(--gold);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.6s var(--ease-spring);
+  }
+
+  .brand:hover .brand__mark {
+    transform: rotate(90deg);
+  }
+
+  .brand__name {
+    font-size: 1.18rem;
+    letter-spacing: -0.03em;
+  }
+
+  .brand__badge {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.2em 0.55em;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    margin-top: 1px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    border-radius: var(--r-pill);
+  }
+
+  .nav__link {
+    position: relative;
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--r-pill);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    transition: color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+
+  .nav__link:hover {
+    color: var(--ink);
+    background: rgba(22, 20, 13, 0.05);
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .header__mail {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .header__cta {
+    padding: 0.7em 0.85em 0.7em 1.2em;
+    font-size: 0.9rem;
+  }
+
+  .header__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0.6rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--line);
+  }
+
+  .header__burger span {
+    width: 20px;
+    height: 1.8px;
+    background: var(--ink);
+    border-radius: 2px;
+  }
+
+  /* ---- Mobile sheet ---- */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: color-mix(in srgb, var(--forest-deep) 30%, transparent);
+    backdrop-filter: blur(6px);
+    display: grid;
+    place-items: start end;
+    padding: 0.85rem;
+    animation: sheet-fade 0.3s var(--ease);
+  }
+
+  .sheet[hidden] {
+    display: none;
+  }
+
+  @keyframes sheet-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .sheet__panel {
+    width: min(360px, 100%);
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-deep);
+    padding: 1.5rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    animation: sheet-slide 0.4s var(--ease);
+  }
+
+  @keyframes sheet-slide {
+    from {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.98);
+    }
+  }
+
+  .sheet__close {
+    align-self: flex-end;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+  }
+
+  .sheet__close svg {
+    width: 1.1rem;
+  }
+
+  .sheet__nav {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .sheet__nav a {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .sheet__mail {
+    text-align: center;
+    margin-top: 0.85rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 940px) {
+    .nav,
+    .header__mail {
+      display: none;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .header__cta {
+      display: none;
+    }
+    .header__burger {
+      display: flex;
+    }
+    .brand__badge {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const sheet = document.querySelector<HTMLElement>("[data-sheet]");
+  const openBtn = document.querySelector("[data-menu-open]");
+  const closers = document.querySelectorAll("[data-menu-close]");
+
+  const open = () => {
+    if (!sheet) return;
+    sheet.hidden = false;
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    if (!sheet) return;
+    sheet.hidden = true;
+    document.body.style.overflow = "";
+  };
+
+  openBtn?.addEventListener("click", open);
+  closers.forEach((c) => c.addEventListener("click", close));
+  sheet?.addEventListener("click", (e) => {
+    if (e.target === sheet) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+</script>

@@ -1,0 +1,87 @@
+---
+const logos = [
+  { name: "Lumen", glyph: "M2 11A9 9 0 0 1 20 11 9 9 0 0 0 2 11Z" },
+  { name: "Northwind", glyph: "M11 2 2 20h18L11 2Zm0 6 4 8H7l4-8Z" },
+  { name: "Cobalt", glyph: "M11 2 20 11 11 20 2 11 11 2Z" },
+  { name: "Hatchworks", glyph: "M11 1c.7 5 4 8.3 9 9-5 .7-8.3 4-9 9-.7-5-4-8.3-9-9 5-.7 8.3-4 9-9Z" },
+  { name: "Verdant", glyph: "M11 20C5 20 2 14 2 5c9 0 9 6 9 9 0-4 3-7 9-7 0 8-4 13-9 13Z" },
+  { name: "Atlas", glyph: "M11 1 20 6v10l-9 5-9-5V6l9-5Z" },
+  { name: "Pulse", glyph: "M1 11h4l2-7 4 14 2-7h6" },
+  { name: "Quartz", glyph: "M6 2h10l4 6-9 12L2 8l4-6Z" },
+];
+const track = [...logos, ...logos];
+---
+
+<section class="logos section-tight" aria-label="Clients">
+  <div class="container">
+    <p class="logos__label" data-reveal>
+      Trusted by founders &amp; teams shipping on the modern web
+    </p>
+  </div>
+
+  <div class="marquee" data-reveal>
+    <div class="marquee__track">
+      {
+        track.map((logo) => (
+          <span class="logos__item">
+            <svg
+              viewBox="0 0 22 22"
+              fill={logo.name === "Pulse" ? "none" : "currentColor"}
+              stroke={logo.name === "Pulse" ? "currentColor" : "none"}
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="22"
+              height="22"
+              aria-hidden="true"
+            >
+              <path d={logo.glyph} />
+            </svg>
+            {logo.name}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .logos {
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+    border-block: 1px solid var(--hairline);
+    background: color-mix(in srgb, var(--paper-raised) 50%, transparent);
+  }
+
+  .logos__label {
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 1.9rem;
+  }
+
+  .logos__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink-2);
+    opacity: 0.62;
+    transition: opacity 0.3s var(--ease), color 0.3s var(--ease);
+    white-space: nowrap;
+  }
+
+  .logos__item:hover {
+    opacity: 1;
+    color: var(--forest);
+  }
+
+  .logos__item svg {
+    color: var(--gold-deep);
+    flex-shrink: 0;
+  }
+</style>

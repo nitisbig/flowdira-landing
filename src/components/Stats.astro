@@ -1,0 +1,149 @@
+---
+const stats = [
+  { value: "40+", label: "Projects designed, built & shipped" },
+  { value: "98", label: "Average Lighthouse performance score" },
+  { value: "14d", label: "Typical time from kickoff to launch" },
+  { value: "97%", label: "Clients who come back for more" },
+];
+---
+
+<section class="stats" id="studio" aria-label="Studio results">
+  <div class="container">
+    <div class="stats__panel" data-reveal>
+      <div class="stats__sun" aria-hidden="true"></div>
+
+      <div class="stats__intro">
+        <p class="eyebrow stats__eyebrow">The studio in numbers</p>
+        <h2 class="stats__title">
+          Small studio.<br /><span class="serif-italic">Serious</span> output.
+        </h2>
+      </div>
+
+      <dl class="stats__grid">
+        {
+          stats.map((s, i) => (
+            <div class="stat" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+              <dt class="stat__value">{s.value}</dt>
+              <dd class="stat__label">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stats {
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem);
+  }
+
+  .stats__panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-xl);
+    background:
+      radial-gradient(90% 120% at 100% 0%, rgba(201, 168, 106, 0.16), transparent 55%),
+      var(--forest);
+    color: var(--on-forest);
+    padding: clamp(2.5rem, 5vw, 4.5rem);
+    box-shadow: var(--shadow-deep);
+  }
+
+  /* grain inside the dark panel for richness */
+  .stats__panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: radial-gradient(
+      rgba(237, 231, 216, 0.05) 1px,
+      transparent 1px
+    );
+    background-size: 4px 4px;
+  }
+
+  .stats__sun {
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 30rem;
+    height: 30rem;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      from 0deg,
+      rgba(201, 168, 106, 0.18) 0deg 0.6deg,
+      transparent 0.6deg 6deg
+    );
+    -webkit-mask: radial-gradient(circle, #000 0%, transparent 62%);
+    mask: radial-gradient(circle, #000 0%, transparent 62%);
+    animation: spin 120s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .stats__intro {
+    position: relative;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .stats__eyebrow {
+    color: var(--gold);
+  }
+  .stats__eyebrow::before {
+    background: rgba(201, 168, 106, 0.5);
+  }
+  .stats__title {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    margin-top: 1rem;
+    color: var(--on-forest);
+  }
+  .stats__title .serif-italic {
+    color: var(--gold);
+  }
+
+  .stats__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .stat {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--forest-line);
+  }
+  .stat__value {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 3.8rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--on-forest);
+  }
+  .stat__label {
+    margin-top: 0.7rem;
+    font-size: 0.88rem;
+    color: var(--on-forest-mut);
+    line-height: 1.45;
+    max-width: 13rem;
+  }
+
+  @media (max-width: 760px) {
+    .stats__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+    }
+  }
+  @media (max-width: 420px) {
+    .stats__grid {
+      grid-template-columns: 1fr;
+    }
+    .stat__label {
+      max-width: none;
+    }
+  }
+</style>

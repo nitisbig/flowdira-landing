@@ -1,0 +1,259 @@
+---
+import BrandMark from "./BrandMark.astro";
+
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: "Services",
+    links: [
+      { label: "Website Design", href: "#services" },
+      { label: "Web Development", href: "#services" },
+      { label: "AI Integration", href: "#services" },
+      { label: "SEO & Performance", href: "#services" },
+    ],
+  },
+  {
+    title: "Studio",
+    links: [
+      { label: "Selected Work", href: "#work" },
+      { label: "Our Process", href: "#process" },
+      { label: "Results", href: "#studio" },
+      { label: "Start a Project", href: "#contact" },
+    ],
+  },
+];
+
+const socials = [
+  { label: "GitHub", href: "https://github.com/flowdira" },
+  { label: "Vercel", href: "https://vercel.com" },
+  { label: "X / Twitter", href: "https://x.com/flowdira" },
+  { label: "LinkedIn", href: "https://linkedin.com/company/flowdira" },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#main" class="footer__logo" aria-label="Flowdira — home">
+          <span class="footer__mark"><BrandMark size={20} /></span>
+          Flowdira
+        </a>
+        <p class="footer__tag">
+          A website design, development &amp; AI integration studio. We design,
+          build and ship fast web experiences — from GitHub to Vercel.
+        </p>
+        <a class="btn footer__cta" href="#contact">
+          Start a project
+          <span class="btn__arrow">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M4 12L12 4M12 4H6M12 4V10"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <nav class="footer__cols" aria-label="Footer">
+        {
+          columns.map((col) => (
+            <div class="footer__col">
+              <h3 class="footer__heading">{col.title}</h3>
+              <ul>
+                {col.links.map((l) => (
+                  <li>
+                    <a class="footer__link" href={l.href}>
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+        <div class="footer__col">
+          <h3 class="footer__heading">Connect</h3>
+          <ul>
+            {
+              socials.map((s) => (
+                <li>
+                  <a
+                    class="footer__link"
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {s.label}
+                    <svg viewBox="0 0 16 16" fill="none" width="11" height="11">
+                      <path
+                        d="M4 12L12 4M12 4H6M12 4V10"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">
+        &copy; {year} Flowdira Studio. Crafted with care.
+      </p>
+      <p class="footer__built">
+        Built with <a href="https://astro.build" target="_blank" rel="noopener"
+          >Astro</a
+        >
+        · Deployed on <a href="https://vercel.com" target="_blank" rel="noopener"
+          >Vercel</a
+        >
+      </p>
+      <a href="#main" class="footer__top-link link-underline">
+        Back to top
+        <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+          <path
+            d="M8 13V3M8 3L4 7M8 3l4 4"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
+    background: color-mix(in srgb, var(--paper-raised) 55%, transparent);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-bottom: 3rem;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .footer__mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.6rem;
+    background: var(--forest);
+    color: var(--gold);
+  }
+  .footer__tag {
+    max-width: 24rem;
+    margin: 1.1rem 0 1.6rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .footer__heading {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    margin-bottom: 1.1rem;
+  }
+  .footer__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    transition: color 0.3s var(--ease);
+  }
+  .footer__link svg {
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .footer__link:hover {
+    color: var(--forest);
+  }
+  .footer__link:hover svg {
+    opacity: 1;
+    transform: none;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .footer__copy,
+  .footer__built {
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  .footer__built a {
+    color: var(--ink-2);
+    font-weight: 540;
+  }
+  .footer__built a:hover {
+    color: var(--forest);
+  }
+  .footer__top-link {
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 760px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .footer__cols {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem 1rem;
+    }
+    .footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

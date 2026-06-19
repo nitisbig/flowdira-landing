@@ -1,0 +1,245 @@
+---
+import BrandMark from "./BrandMark.astro";
+---
+
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="cta__card" data-reveal>
+      <div class="cta__sun" aria-hidden="true"></div>
+      <div class="cta__glow" aria-hidden="true"></div>
+
+      <span class="cta__badge">
+        <span class="cta__pulse"></span> Booking projects for Q3 2026
+      </span>
+
+      <h2 class="cta__title">
+        Let's build something<br />
+        <span class="serif-italic">worth shipping.</span>
+      </h2>
+
+      <p class="cta__lede">
+        Tell us about your project. We'll reply within one business day with a
+        clear plan, timeline and a fixed quote — no pressure, no jargon.
+      </p>
+
+      <form class="cta__form" netlify-honeypot="bot-field" data-cta-form>
+        <p hidden>
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+        <input
+          class="cta__input"
+          type="email"
+          name="email"
+          placeholder="you@company.com"
+          autocomplete="email"
+          required
+          aria-label="Your email"
+        />
+        <button class="btn btn--gold cta__submit" type="submit">
+          Start a project
+          <span class="btn__arrow">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M4 12L12 4M12 4H6M12 4V10"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <p class="cta__alt">
+        Prefer email? Write to
+        <a class="link-underline" href="mailto:hello@flowdira.com">
+          hello@flowdira.com
+        </a>
+      </p>
+
+      <span class="cta__watermark" aria-hidden="true"><BrandMark size={120} /></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem);
+  }
+
+  .cta__card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border-radius: var(--r-xl);
+    padding: clamp(3rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4rem);
+    background:
+      radial-gradient(70% 90% at 50% 0%, rgba(201, 168, 106, 0.15), transparent 60%),
+      var(--forest-deep);
+    color: var(--on-forest);
+    box-shadow: var(--shadow-deep);
+    isolation: isolate;
+  }
+
+  .cta__sun {
+    position: absolute;
+    inset: auto 50% -60% 50%;
+    translate: -50% 0;
+    width: 44rem;
+    height: 44rem;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      from 0deg,
+      rgba(201, 168, 106, 0.12) 0deg 0.6deg,
+      transparent 0.6deg 7deg
+    );
+    -webkit-mask: radial-gradient(circle, #000 0%, transparent 60%);
+    mask: radial-gradient(circle, #000 0%, transparent 60%);
+    z-index: -1;
+    animation: spin 140s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .cta__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.5;
+    background-image: radial-gradient(
+      rgba(237, 231, 216, 0.06) 1px,
+      transparent 1px
+    );
+    background-size: 5px 5px;
+  }
+
+  .cta__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 540;
+    color: var(--on-forest);
+    background: rgba(237, 231, 216, 0.1);
+    border: 1px solid rgba(237, 231, 216, 0.16);
+    padding: 0.45em 0.95em;
+    border-radius: var(--r-pill);
+  }
+  .cta__pulse {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 0 rgba(201, 168, 106, 0.6);
+    animation: pulse 2s var(--ease) infinite;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(201, 168, 106, 0.55);
+    }
+    70% {
+      box-shadow: 0 0 0 8px rgba(201, 168, 106, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(201, 168, 106, 0);
+    }
+  }
+
+  .cta__title {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    margin: 1.5rem 0 1.1rem;
+    color: var(--on-forest);
+  }
+  .cta__title .serif-italic {
+    color: var(--gold);
+  }
+
+  .cta__lede {
+    max-width: 34rem;
+    margin: 0 auto 2.25rem;
+    color: var(--on-forest-mut);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .cta__form {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 30rem;
+    margin: 0 auto;
+    padding: 0.5rem;
+    background: rgba(237, 231, 216, 0.07);
+    border: 1px solid rgba(237, 231, 216, 0.16);
+    border-radius: var(--r-pill);
+  }
+  .cta__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    padding: 0.7rem 1.1rem;
+    color: var(--on-forest);
+    font: inherit;
+    font-size: 0.95rem;
+  }
+  .cta__input::placeholder {
+    color: var(--on-forest-mut);
+  }
+  .cta__input:focus {
+    outline: none;
+  }
+  .cta__form:focus-within {
+    border-color: var(--gold);
+  }
+  .cta__submit {
+    flex-shrink: 0;
+  }
+
+  .cta__alt {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--on-forest-mut);
+  }
+  .cta__alt a {
+    color: var(--on-forest);
+  }
+
+  .cta__watermark {
+    position: absolute;
+    bottom: -2.5rem;
+    right: -2rem;
+    color: rgba(201, 168, 106, 0.12);
+    z-index: -1;
+  }
+
+  @media (max-width: 560px) {
+    .cta__form {
+      flex-direction: column;
+      border-radius: var(--r-lg);
+    }
+    .cta__input {
+      text-align: center;
+    }
+    .cta__submit {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Friendly client-side handoff — opens the user's mail client with context.
+  const form = document.querySelector<HTMLFormElement>("[data-cta-form]");
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const email = String(data.get("email") || "").trim();
+    if (!email) return;
+    const subject = encodeURIComponent("New project enquiry — Flowdira");
+    const body = encodeURIComponent(
+      `Hi Flowdira team,\n\nI'd like to talk about a project.\n\nMy email: ${email}\n\nAbout the project: `
+    );
+    window.location.href = `mailto:hello@flowdira.com?subject=${subject}&body=${body}`;
+  });
+</script>
