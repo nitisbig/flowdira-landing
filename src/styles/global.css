@@ -426,3 +426,107 @@ h3 {
   white-space: nowrap;
   border: 0;
 }
+
+/* ============================================================
+   Legal pages (Terms, Privacy) — long-form prose
+   ============================================================ */
+.legal-page {
+  padding-block: clamp(3rem, 7vw, 6rem) clamp(4rem, 8vw, 7rem);
+}
+
+.legal {
+  max-width: 48rem;
+}
+
+.legal__lede {
+  margin-top: 1.1rem;
+  font-size: 1.1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.legal__updated {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 540;
+  color: var(--muted-2);
+}
+
+.legal h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  margin-top: 1rem;
+}
+
+.legal h2 {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  margin-top: 2.75rem;
+  margin-bottom: 0.85rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.legal h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.legal p,
+.legal li {
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.legal p + p {
+  margin-top: 1rem;
+}
+
+.legal ul {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.legal li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.legal li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--gold-deep);
+}
+
+.legal a {
+  color: var(--forest);
+  font-weight: 540;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--line-strong);
+}
+
+.legal a:hover {
+  text-decoration-color: var(--forest);
+}
+
+.legal__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 3rem;
+  font-size: 0.92rem;
+  font-weight: 540;
+  color: var(--ink-2);
+}
+
+.legal__back:hover {
+  color: var(--forest);
+}

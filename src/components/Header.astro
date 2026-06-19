@@ -2,16 +2,16 @@
 import BrandMark from "./BrandMark.astro";
 
 const links = [
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "Process", href: "#process" },
-  { label: "Studio", href: "#studio" },
+  { label: "Services", href: "/#services" },
+  { label: "Work", href: "/#work" },
+  { label: "Process", href: "/#process" },
+  { label: "Studio", href: "/#studio" },
 ];
 ---
 
 <header class="header" data-header>
   <div class="container header__inner">
-    <a href="#main" class="brand" aria-label="Flowdira — home">
+    <a href="/" class="brand" aria-label="Flowdira — home">
       <span class="brand__mark"><BrandMark size={22} /></span>
       <span class="brand__name">Flowdira</span>
       <span class="brand__badge">studio</span>
@@ -28,10 +28,10 @@ const links = [
     </nav>
 
     <div class="header__actions">
-      <a class="header__mail link-underline" href="mailto:hello@flowdira.com">
-        hello@flowdira.com
+      <a class="header__mail link-underline" href="mailto:contact@flowdira.com">
+        contact@flowdira.com
       </a>
-      <a class="btn header__cta" href="#contact">
+      <a class="btn header__cta" href="/#contact">
         Start a project
         <span class="btn__arrow">
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -72,7 +72,7 @@ const links = [
         ))
       }
     </nav>
-    <a class="btn btn--block" href="#contact" data-menu-close>
+    <a class="btn btn--block" href="/#contact" data-menu-close>
       Start a project
       <span class="btn__arrow">
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -85,7 +85,7 @@ const links = [
         </svg>
       </span>
     </a>
-    <a class="sheet__mail" href="mailto:hello@flowdira.com">hello@flowdira.com</a>
+    <a class="sheet__mail" href="mailto:contact@flowdira.com">contact@flowdira.com</a>
   </div>
 </div>
 

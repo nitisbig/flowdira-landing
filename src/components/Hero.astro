@@ -40,10 +40,10 @@ import BrandMark from "./BrandMark.astro";
 
       <div class="hero__trust hero__rise">
         <div class="avatars" aria-hidden="true">
-          <span style="--a:#2c5240;--b:#1f3d2e"></span>
-          <span style="--a:#c9a86a;--b:#a07f44"></span>
-          <span style="--a:#3b372d;--b:#16140d"></span>
-          <span style="--a:#335440;--b:#14271d"></span>
+          <span style="--a:#2c5240;--b:#1f3d2e">AK</span>
+          <span style="--a:#c9a86a;--b:#a07f44">MR</span>
+          <span style="--a:#3b372d;--b:#16140d">JT</span>
+          <span style="--a:#335440;--b:#14271d">SD</span>
         </div>
         <p class="hero__trust-text">
           <strong>40+ founders</strong> shipped &amp; growing — design you'll
@@ -189,6 +189,8 @@ import BrandMark from "./BrandMark.astro";
   }
 
   .avatars span {
+    display: grid;
+    place-items: center;
     width: 2.1rem;
     height: 2.1rem;
     border-radius: 50%;
@@ -196,6 +198,11 @@ import BrandMark from "./BrandMark.astro";
     margin-left: -0.7rem;
     background: linear-gradient(140deg, var(--a), var(--b));
     box-shadow: var(--shadow-card);
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--on-forest);
   }
 
   .avatars span:first-child {

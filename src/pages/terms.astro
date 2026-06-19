@@ -1,0 +1,155 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const updated = "June 19, 2026";
+---
+
+<Layout
+  title="Terms & Conditions — Flowdira"
+  description="The terms and conditions governing the use of the Flowdira website and our website design, development and AI integration services."
+>
+  <Header />
+  <main id="main" class="legal-page">
+    <article class="legal container">
+      <p class="eyebrow">Legal</p>
+      <h1>Terms &amp; Conditions</h1>
+      <p class="legal__lede">
+        These terms govern your use of the Flowdira website and the design,
+        development and AI integration services we provide. By using our site or
+        engaging us for a project, you agree to the terms below.
+      </p>
+      <p class="legal__updated">Last updated: {updated}</p>
+
+      <h2>1. Agreement to terms</h2>
+      <p>
+        Flowdira (“Flowdira”, “we”, “us”, or “our”) operates flowdira.com and
+        provides website design, web development and AI integration services.
+        These Terms &amp; Conditions form a binding agreement between you and
+        Flowdira. If you do not agree with any part of these terms, please do not
+        use our website or services.
+      </p>
+
+      <h2>2. Our services</h2>
+      <p>
+        We provide professional services including, but not limited to, UI/UX and
+        website design, front-end and full-stack web development, and AI feature
+        integration. The specific scope, deliverables, timeline and price of any
+        engagement are defined in a separate written proposal or quote agreed
+        between you and Flowdira, which forms part of these terms.
+      </p>
+
+      <h2>3. Quotes, fees &amp; payment</h2>
+      <ul>
+        <li>
+          Project pricing is provided as a written quote and is valid for the
+          period stated within it.
+        </li>
+        <li>
+          Unless agreed otherwise, projects require a deposit before work begins,
+          with the balance due on completion or per the agreed milestone schedule.
+        </li>
+        <li>
+          Invoices are payable within the period stated on the invoice. Late or
+          unpaid invoices may pause work and delay delivery.
+        </li>
+      </ul>
+
+      <h2>4. Project scope &amp; revisions</h2>
+      <p>
+        Each engagement includes the deliverables and revision rounds described in
+        the agreed proposal. Work that falls outside the agreed scope — including
+        additional features, pages or revision rounds — may be quoted separately
+        as additional work.
+      </p>
+
+      <h2>5. Client responsibilities</h2>
+      <p>
+        To deliver on time, we rely on you to provide content, brand assets,
+        access credentials, feedback and approvals in a timely manner. Delays in
+        providing these may affect the project timeline. You are responsible for
+        ensuring that any materials you supply do not infringe the rights of any
+        third party.
+      </p>
+
+      <h2>6. Intellectual property &amp; ownership</h2>
+      <p>
+        Upon full payment, ownership of the final, delivered work product transfers
+        to you, except for any third-party components, open-source libraries, fonts
+        or services that remain subject to their own licences. Flowdira retains the
+        right to display non-confidential work in our portfolio and marketing
+        materials unless agreed otherwise in writing.
+      </p>
+
+      <h2>7. Third-party services</h2>
+      <p>
+        Our work commonly relies on third-party platforms and services such as
+        GitHub, Vercel, Cloudflare, content management systems and AI model
+        providers. Your use of those services is governed by their own terms, and
+        Flowdira is not responsible for changes, outages, pricing or limitations
+        imposed by those providers.
+      </p>
+
+      <h2>8. Warranties &amp; disclaimers</h2>
+      <p>
+        We take care to deliver high-quality, well-tested work. However, our
+        website and services are provided “as is” without warranties of any kind,
+        whether express or implied, including fitness for a particular purpose. We
+        do not warrant that the website or any deliverable will be uninterrupted,
+        error-free or free of all vulnerabilities.
+      </p>
+
+      <h2>9. Limitation of liability</h2>
+      <p>
+        To the maximum extent permitted by law, Flowdira shall not be liable for
+        any indirect, incidental or consequential damages arising from the use of
+        our website or services. Our total liability for any claim arising out of
+        an engagement shall not exceed the total fees paid to us for that
+        engagement.
+      </p>
+
+      <h2>10. Termination</h2>
+      <p>
+        Either party may terminate an engagement in writing. On termination, you
+        agree to pay for all work completed up to the termination date. Sections of
+        these terms that by their nature should survive termination — including
+        ownership, liability and governing law — will remain in effect.
+      </p>
+
+      <h2>11. Governing law</h2>
+      <p>
+        These terms are governed by applicable local law. Any disputes will be
+        resolved through good-faith negotiation and, where required, the competent
+        courts of the relevant jurisdiction.
+      </p>
+
+      <h2>12. Changes to these terms</h2>
+      <p>
+        We may update these terms from time to time. The latest version will always
+        be available on this page with a revised “last updated” date. Continued use
+        of our website or services after changes take effect constitutes acceptance
+        of the updated terms.
+      </p>
+
+      <h2>13. Contact</h2>
+      <p>
+        Questions about these terms? Email us at
+        <a href="mailto:contact@flowdira.com">contact@flowdira.com</a>.
+      </p>
+
+      <a href="/" class="legal__back">
+        <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+          <path
+            d="M10 12 6 8l4-4"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        Back to home
+      </a>
+    </article>
+  </main>
+  <Footer />
+</Layout>

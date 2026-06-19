@@ -7,28 +7,28 @@ const columns = [
   {
     title: "Services",
     links: [
-      { label: "Website Design", href: "#services" },
-      { label: "Web Development", href: "#services" },
-      { label: "AI Integration", href: "#services" },
-      { label: "SEO & Performance", href: "#services" },
+      { label: "Website Design", href: "/#services" },
+      { label: "Web Development", href: "/#services" },
+      { label: "AI Integration", href: "/#services" },
+      { label: "SEO & Performance", href: "/#services" },
     ],
   },
   {
     title: "Studio",
     links: [
-      { label: "Selected Work", href: "#work" },
-      { label: "Our Process", href: "#process" },
-      { label: "Results", href: "#studio" },
-      { label: "Start a Project", href: "#contact" },
+      { label: "Selected Work", href: "/#work" },
+      { label: "Our Process", href: "/#process" },
+      { label: "Results", href: "/#studio" },
+      { label: "Start a Project", href: "/#contact" },
     ],
   },
 ];
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/flowdira" },
-  { label: "Vercel", href: "https://vercel.com" },
   { label: "X / Twitter", href: "https://x.com/flowdira" },
-  { label: "LinkedIn", href: "https://linkedin.com/company/flowdira" },
+  { label: "Facebook", href: "https://www.facebook.com/share/1Ar73HvrGe/" },
+  { label: "GitHub", href: "https://github.com/nitisbig" },
+  { label: "Email", href: "mailto:contact@flowdira.com" },
 ];
 ---
 
@@ -36,15 +36,19 @@ const socials = [
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
-        <a href="#main" class="footer__logo" aria-label="Flowdira — home">
+        <a href="/" class="footer__logo" aria-label="Flowdira — home">
           <span class="footer__mark"><BrandMark size={20} /></span>
           Flowdira
         </a>
         <p class="footer__tag">
           A website design, development &amp; AI integration studio. We design,
-          build and ship fast web experiences — from GitHub to Vercel.
+          build and ship fast web experiences — from GitHub to Vercel &amp;
+          Cloudflare.
         </p>
-        <a class="btn footer__cta" href="#contact">
+        <a class="footer__email link-underline" href="mailto:contact@flowdira.com">
+          contact@flowdira.com
+        </a>
+        <a class="btn footer__cta" href="/#contact">
           Start a project
           <span class="btn__arrow">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -111,15 +115,12 @@ const socials = [
       <p class="footer__copy">
         &copy; {year} Flowdira Studio. Crafted with care.
       </p>
-      <p class="footer__built">
-        Built with <a href="https://astro.build" target="_blank" rel="noopener"
-          >Astro</a
-        >
-        · Deployed on <a href="https://vercel.com" target="_blank" rel="noopener"
-          >Vercel</a
-        >
-      </p>
-      <a href="#main" class="footer__top-link link-underline">
+      <nav class="footer__legal" aria-label="Legal">
+        <a href="/terms" class="footer__legal-link">Terms &amp; Conditions</a>
+        <span class="footer__legal-sep" aria-hidden="true">·</span>
+        <a href="/privacy" class="footer__legal-link">Privacy Policy</a>
+      </nav>
+      <a href="/#main" class="footer__top-link link-underline">
         Back to top
         <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
           <path
@@ -168,10 +169,17 @@ const socials = [
   }
   .footer__tag {
     max-width: 24rem;
-    margin: 1.1rem 0 1.6rem;
+    margin: 1.1rem 0 1rem;
     color: var(--muted);
     font-size: 0.95rem;
     line-height: 1.6;
+  }
+  .footer__email {
+    display: inline-flex;
+    margin-bottom: 1.6rem;
+    font-size: 0.92rem;
+    font-weight: 540;
+    color: var(--forest);
   }
 
   .footer__cols {
@@ -223,17 +231,26 @@ const socials = [
     padding-top: 2rem;
     border-top: 1px solid var(--hairline);
   }
-  .footer__copy,
-  .footer__built {
+  .footer__copy {
     font-size: 0.84rem;
     color: var(--muted);
   }
-  .footer__built a {
+  .footer__legal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.84rem;
+  }
+  .footer__legal-link {
     color: var(--ink-2);
     font-weight: 540;
+    transition: color 0.3s var(--ease);
   }
-  .footer__built a:hover {
+  .footer__legal-link:hover {
     color: var(--forest);
+  }
+  .footer__legal-sep {
+    color: var(--muted-2);
   }
   .footer__top-link {
     font-size: 0.84rem;
