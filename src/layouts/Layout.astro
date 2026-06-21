@@ -15,7 +15,7 @@ export interface Props {
 const {
   title = "Flowdira — Website Design, Development & AI Integration Studio",
   description = "Flowdira is a website design and development studio crafting fast, modern websites and AI-integrated web apps. We design, build, and ship from GitHub to Vercel.",
-  image = "/og.svg",
+  image = "/og.png",
   canonical,
 } = Astro.props;
 
@@ -49,7 +49,7 @@ const jsonLd = {
       description,
       url: siteUrl,
       image: ogImage,
-      logo: `${siteUrl}/logo.png`,
+      logo: `${siteUrl}/logo-512.png`,
       priceRange: "$$",
       areaServed: "Worldwide",
       knowsAbout: [
@@ -115,8 +115,10 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -128,6 +130,8 @@ const jsonLd = {
 
     <!-- Icons & theme -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#f1ebe0" />
     <meta name="color-scheme" content="light" />
 
