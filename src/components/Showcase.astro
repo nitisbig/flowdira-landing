@@ -66,12 +66,14 @@ const projects = [
 ];
 
 const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
+// bento rhythm — these indices render as full-width feature cards
+const featureIndices = new Set([0, 3]);
 ---
 
 <section class="work section" id="work">
   <div class="container">
     <header class="work__head">
-      <div data-reveal>
+      <div data-reveal="left">
         <p class="eyebrow">Selected work</p>
         <h2 class="work__title">
           Designed, built &amp; <span class="serif-italic">deployed.</span>
@@ -79,7 +81,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
       </div>
 
       <!-- GitHub → build → live pipeline -->
-      <div class="pipeline" data-reveal style="--reveal-delay: 80ms">
+      <div class="pipeline" data-reveal="right">
         <span class="pipeline__node">
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
             <path
@@ -106,173 +108,182 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     <div class="work__grid">
       {
         projects.map((p, i) => (
-          <article class="proj" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
-            <div class:list={["proj__preview", `t-${p.theme}`]}>
-              <div class="proj__chrome">
-                <span class="proj__dots">
-                  <i /><i /><i />
-                </span>
-                <span class="proj__addr">{p.host}</span>
-              </div>
+          <article
+            class:list={["proj", { "proj--feature": featureIndices.has(i) }]}
+            data-reveal="scale"
+            data-tilt
+            style={`--reveal-delay: ${(i % 2) * 90}ms`}
+          >
+            <div class="proj__inner">
+              <span class="proj__spot" aria-hidden="true" />
 
-              <div class="proj__screen">
-                {p.theme === "editor" && (
-                  <div class="m-editor">
-                    <div class="m-toolbar">
-                      <span /><span /><span /><i />
-                    </div>
-                    <div class="m-canvas">
-                      <span class="m-line m-line--lg" />
-                      <span class="m-line" />
-                      <span class="m-sel">
-                        <span class="m-line m-line--sm" />
-                      </span>
-                    </div>
-                  </div>
-                )}
-                {p.theme === "ai" && (
-                  <div class="m-ai">
-                    <div class="m-side">
-                      <span /><span /><span />
-                    </div>
-                    <div class="m-chat">
-                      <span class="m-msg m-msg--in" />
-                      <span class="m-msg m-msg--out" />
-                      <span class="m-msg m-msg--in m-msg--sm" />
-                      <span class="m-prompt" />
-                    </div>
-                  </div>
-                )}
-                {p.theme === "commerce" && (
-                  <div class="m-commerce">
-                    <div class="m-bar">
-                      <span class="m-brand">
-                        <BrandMark size={10} /> Gracias
-                      </span>
-                      <span class="m-cart" />
-                    </div>
-                    <div class="m-grid">
-                      <span /><span /><span /><span /><span /><span />
-                    </div>
-                  </div>
-                )}
-                {p.theme === "api" && (
-                  <div class="m-api">
-                    <div class="m-req">
-                      <span class="m-method">POST</span>
-                      <span class="m-path" />
-                    </div>
-                    <div class="m-res">
-                      <span class="m-json" />
-                      <span class="m-json m-json--sm" />
-                      <span class="m-valid">
-                        <svg viewBox="0 0 16 16" fill="none" width="9" height="9">
-                          <path
-                            d="M3 8.5 6.5 12 13 4.5"
-                            stroke="currentColor"
-                            stroke-width="2.2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                        deliverable
-                      </span>
-                    </div>
-                  </div>
-                )}
-                {p.theme === "studio" && (
-                  <div class="m-studio">
-                    <span class="m-eyebrow" />
-                    <p class="m-headline">One lesson<br />worth keeping</p>
-                    <div class="m-thumbs">
-                      <span /><span /><span />
-                    </div>
-                  </div>
-                )}
-                {p.theme === "analytics" && (
-                  <div class="m-analytics">
-                    <div class="m-stats">
-                      <span /><span /><span />
-                    </div>
-                    <div class="m-chart">
-                      <i style="height:40%" /><i style="height:70%" />
-                      <i style="height:55%" /><i style="height:90%" />
-                      <i style="height:65%" /><i style="height:100%" />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <span class:list={["proj__deploy", `proj__deploy--${p.platform}`]}>
-                {p.platform === "cloudflare" ? (
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-                    <path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 3.5 3.5 0 0 0 7 18Z" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10">
-                    <path d="M12 3 22 20H2L12 3Z" />
-                  </svg>
-                )}
-                Live
-              </span>
-            </div>
-
-            <div class="proj__meta">
-              <div class="proj__line">
-                <h3 class="proj__name">{p.title}</h3>
-                <a
-                  class="proj__visit"
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener"
-                  aria-label={`Visit ${p.title}`}
-                >
-                  <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                    <path
-                      d="M4 12L12 4M12 4H6M12 4V10"
-                      stroke="currentColor"
-                      stroke-width="1.7"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <p class="proj__cat">{p.cat}</p>
-
-              <a
-                class="proj__repo"
-                href={`https://github.com/${p.repo}`}
-                target="_blank"
-                rel="noopener"
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
-                  <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z" />
-                </svg>
-                <span class="proj__repo-name">{p.repo}</span>
-              </a>
-
-              <div class="proj__foot">
-                <div class="proj__tags">
-                  {p.tags.map((t) => (
-                    <span class="tag">{t}</span>
-                  ))}
+              <div class:list={["proj__preview", `t-${p.theme}`]}>
+                <div class="proj__chrome">
+                  <span class="proj__dots">
+                    <i /><i /><i />
+                  </span>
+                  <span class="proj__addr">{p.host}</span>
                 </div>
-                <span
-                  class:list={["proj__plat", `proj__plat--${p.platform}`]}
-                  title={`Deployed on ${platformLabel[p.platform]}`}
-                >
+
+                <div class="proj__screen">
+                  {p.theme === "editor" && (
+                    <div class="m-editor">
+                      <div class="m-toolbar">
+                        <span /><span /><span /><i />
+                      </div>
+                      <div class="m-canvas">
+                        <span class="m-line m-line--lg" />
+                        <span class="m-line" />
+                        <span class="m-sel">
+                          <span class="m-line m-line--sm" />
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {p.theme === "ai" && (
+                    <div class="m-ai">
+                      <div class="m-side">
+                        <span /><span /><span />
+                      </div>
+                      <div class="m-chat">
+                        <span class="m-msg m-msg--in" />
+                        <span class="m-msg m-msg--out" />
+                        <span class="m-msg m-msg--in m-msg--sm" />
+                        <span class="m-prompt" />
+                      </div>
+                    </div>
+                  )}
+                  {p.theme === "commerce" && (
+                    <div class="m-commerce">
+                      <div class="m-bar">
+                        <span class="m-brand">
+                          <BrandMark size={10} /> Gracias
+                        </span>
+                        <span class="m-cart" />
+                      </div>
+                      <div class="m-grid">
+                        <span /><span /><span /><span /><span /><span />
+                      </div>
+                    </div>
+                  )}
+                  {p.theme === "api" && (
+                    <div class="m-api">
+                      <div class="m-req">
+                        <span class="m-method">POST</span>
+                        <span class="m-path" />
+                      </div>
+                      <div class="m-res">
+                        <span class="m-json" />
+                        <span class="m-json m-json--sm" />
+                        <span class="m-valid">
+                          <svg viewBox="0 0 16 16" fill="none" width="9" height="9">
+                            <path
+                              d="M3 8.5 6.5 12 13 4.5"
+                              stroke="currentColor"
+                              stroke-width="2.2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          deliverable
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {p.theme === "studio" && (
+                    <div class="m-studio">
+                      <span class="m-eyebrow" />
+                      <p class="m-headline">One lesson<br />worth keeping</p>
+                      <div class="m-thumbs">
+                        <span /><span /><span />
+                      </div>
+                    </div>
+                  )}
+                  {p.theme === "analytics" && (
+                    <div class="m-analytics">
+                      <div class="m-stats">
+                        <span /><span /><span />
+                      </div>
+                      <div class="m-chart">
+                        <i style="height:40%" /><i style="height:70%" />
+                        <i style="height:55%" /><i style="height:90%" />
+                        <i style="height:65%" /><i style="height:100%" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <span class:list={["proj__deploy", `proj__deploy--${p.platform}`]}>
                   {p.platform === "cloudflare" ? (
                     <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
                       <path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 3.5 3.5 0 0 0 7 18Z" />
                     </svg>
                   ) : (
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10">
                       <path d="M12 3 22 20H2L12 3Z" />
                     </svg>
                   )}
-                  {platformLabel[p.platform]}
+                  Live
                 </span>
+              </div>
+
+              <div class="proj__meta">
+                <div class="proj__line">
+                  <h3 class="proj__name">{p.title}</h3>
+                  <a
+                    class="proj__visit"
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Visit ${p.title}`}
+                  >
+                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                      <path
+                        d="M4 12L12 4M12 4H6M12 4V10"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
+                </div>
+                <p class="proj__cat">{p.cat}</p>
+
+                <a
+                  class="proj__repo"
+                  href={`https://github.com/${p.repo}`}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
+                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z" />
+                  </svg>
+                  <span class="proj__repo-name">{p.repo}</span>
+                </a>
+
+                <div class="proj__foot">
+                  <div class="proj__tags">
+                    {p.tags.map((t) => (
+                      <span class="tag">{t}</span>
+                    ))}
+                  </div>
+                  <span
+                    class:list={["proj__plat", `proj__plat--${p.platform}`]}
+                    title={`Deployed on ${platformLabel[p.platform]}`}
+                  >
+                    {p.platform === "cloudflare" ? (
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
+                        <path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 3.5 3.5 0 0 0 7 18Z" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
+                        <path d="M12 3 22 20H2L12 3Z" />
+                      </svg>
+                    )}
+                    {platformLabel[p.platform]}
+                  </span>
+                </div>
               </div>
             </div>
           </article>
@@ -318,7 +329,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     margin-top: 1rem;
   }
   .work__title .serif-italic {
-    color: var(--forest);
+    color: var(--blue);
   }
 
   /* pipeline */
@@ -341,7 +352,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     color: var(--ink-2);
   }
   .pipeline__node--live {
-    color: var(--forest);
+    color: var(--blue);
     font-weight: 600;
   }
   .pipeline__line {
@@ -356,7 +367,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     position: absolute;
     inset: 0;
     width: 40%;
-    background: var(--forest);
+    background: var(--blue);
     animation: flow 2.4s var(--ease) infinite;
   }
   @keyframes flow {
@@ -371,7 +382,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 50%;
-    border: 2px solid var(--gold-deep);
+    border: 2px solid var(--blue);
     border-top-color: transparent;
     animation: spin 1s linear infinite;
   }
@@ -390,15 +401,54 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
 
   .proj {
     border-radius: var(--r-lg);
+    perspective: 1100px;
+  }
+  .proj--feature {
+    grid-column: 1 / -1;
+  }
+
+  /* tilt + lift target */
+  .proj__inner {
+    position: relative;
+    height: 100%;
+    border-radius: var(--r-lg);
     background: var(--paper-raised);
     border: 1px solid var(--hairline);
     box-shadow: var(--shadow-card);
     overflow: hidden;
-    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease),
+      border-color 0.5s var(--ease);
   }
-  .proj:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-float);
+  .proj:hover .proj__inner {
+    box-shadow: var(--shadow-float), var(--blue-glow);
+    border-color: var(--blue-line);
+  }
+
+  /* feature cards lay preview + meta side by side */
+  .proj--feature .proj__inner {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    align-items: stretch;
+  }
+
+  /* pointer-tracking spotlight */
+  .proj__spot {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      460px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(10, 114, 247, 0.16),
+      transparent 60%
+    );
+    transition: opacity 0.4s var(--ease);
+  }
+  .proj:hover .proj__spot {
+    opacity: 1;
   }
 
   .proj__preview {
@@ -409,6 +459,11 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     aspect-ratio: 16 / 10;
     background: var(--paper-sunk);
     border: 1px solid var(--hairline);
+  }
+  .proj--feature .proj__preview {
+    aspect-ratio: auto;
+    margin: 0.7rem 0 0.7rem 0.7rem;
+    min-height: 17rem;
   }
 
   .proj__chrome {
@@ -452,8 +507,8 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     gap: 0.3rem;
     font-size: 0.62rem;
     font-weight: 600;
-    color: var(--on-forest);
-    background: color-mix(in srgb, var(--forest-deep) 86%, transparent);
+    color: #fff;
+    background: color-mix(in srgb, var(--blue-deep) 86%, transparent);
     backdrop-filter: blur(4px);
     padding: 0.3em 0.6em;
     border-radius: var(--r-pill);
@@ -493,7 +548,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     width: 0.7rem;
     height: 0.5rem;
     border-radius: 0.2rem;
-    background: var(--gold);
+    background: var(--blue-bright);
   }
   .m-canvas {
     flex: 1;
@@ -523,7 +578,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
   .m-sel {
     padding: 0.3rem;
     border-radius: 0.35rem;
-    border: 1.5px dashed var(--gold-deep);
+    border: 1.5px dashed var(--blue);
     position: relative;
   }
   .m-sel::after {
@@ -534,12 +589,12 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     width: 0.4rem;
     height: 0.4rem;
     border-radius: 50%;
-    background: var(--gold-deep);
+    background: var(--blue);
   }
 
   /* ai */
   .t-ai {
-    background: linear-gradient(160deg, #14271d, #0c1a13);
+    background: linear-gradient(160deg, #0a1f4a, #051028);
   }
   .m-ai {
     height: 100%;
@@ -558,7 +613,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     background: rgba(237, 231, 216, 0.16);
   }
   .m-side span:first-child {
-    background: var(--gold);
+    background: var(--blue-bright);
     width: 80%;
   }
   .m-chat {
@@ -579,7 +634,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
   .m-msg--out {
     width: 55%;
     align-self: flex-end;
-    background: var(--gold);
+    background: var(--blue);
   }
   .m-msg--sm {
     width: 45%;
@@ -641,7 +696,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
 
   /* api */
   .t-api {
-    background: linear-gradient(160deg, #14271d, #0c1a13);
+    background: linear-gradient(160deg, #0a1f4a, #051028);
   }
   .m-api {
     height: 100%;
@@ -659,8 +714,8 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: var(--forest-deep);
-    background: var(--gold);
+    color: #fff;
+    background: var(--blue);
     padding: 0.18em 0.45em;
     border-radius: 0.3rem;
   }
@@ -711,7 +766,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     width: 2.5rem;
     height: 0.4rem;
     border-radius: var(--r-pill);
-    background: var(--gold-deep);
+    background: var(--blue);
   }
   .m-headline {
     font-family: var(--font-display);
@@ -773,7 +828,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     background: var(--forest-soft);
   }
   .m-chart i:nth-child(4) {
-    background: var(--gold);
+    background: var(--blue);
   }
   .m-chart i:last-child {
     background: var(--forest);
@@ -782,6 +837,12 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
   /* ---- meta ---- */
   .proj__meta {
     padding: 1.25rem 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .proj--feature .proj__meta {
+    justify-content: center;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
   }
   .proj__line {
     display: flex;
@@ -793,6 +854,9 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     font-size: 1.3rem;
     letter-spacing: -0.03em;
   }
+  .proj--feature .proj__name {
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  }
   .proj__visit {
     display: grid;
     place-items: center;
@@ -803,17 +867,21 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     color: var(--ink);
     flex-shrink: 0;
     transition: background 0.4s var(--ease), color 0.4s var(--ease),
-      transform 0.4s var(--ease);
+      transform 0.4s var(--ease), border-color 0.4s var(--ease);
   }
   .proj__visit:hover {
-    background: var(--forest);
-    color: var(--on-forest);
+    background: var(--blue-grad);
+    border-color: transparent;
+    color: #fff;
     transform: rotate(45deg);
   }
   .proj__cat {
     font-size: 0.85rem;
     color: var(--muted);
     margin-top: 0.2rem;
+  }
+  .proj--feature .proj__cat {
+    font-size: 0.95rem;
   }
   .proj__repo {
     display: inline-flex;
@@ -829,7 +897,9 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     border: 1px solid var(--hairline);
     max-width: 100%;
     min-width: 0;
-    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+    align-self: flex-start;
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease),
+      background 0.3s var(--ease);
   }
   .proj__repo-name {
     overflow: hidden;
@@ -841,8 +911,9 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     flex-shrink: 0;
   }
   .proj__repo:hover {
-    color: var(--forest);
-    border-color: var(--line-strong);
+    color: var(--blue);
+    border-color: var(--blue-line);
+    background: var(--blue-soft);
   }
   .proj__foot {
     display: flex;
@@ -863,7 +934,7 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     gap: 0.35rem;
     font-size: 0.74rem;
     font-weight: 600;
-    color: var(--forest);
+    color: var(--blue);
     white-space: nowrap;
   }
   .proj__plat--cloudflare {
@@ -876,6 +947,12 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     margin-top: 2.75rem;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .proj__inner {
+      transform: none !important;
+    }
+  }
+
   @media (max-width: 760px) {
     .work__grid {
       grid-template-columns: 1fr;
@@ -883,5 +960,51 @@ const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
     .work__head {
       align-items: flex-start;
     }
+    .proj--feature .proj__inner {
+      grid-template-columns: 1fr;
+    }
+    .proj--feature .proj__preview {
+      margin: 0.6rem 0.6rem 0;
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+    }
   }
 </style>
+
+<script>
+  // Premium hover layer: pointer-tracking spotlight + subtle 3D tilt.
+  // Skipped entirely for touch / reduced-motion so it never gets in the way.
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  if (!reduce && fine) {
+    const cards = document.querySelectorAll<HTMLElement>("[data-tilt]");
+    cards.forEach((card) => {
+      const inner = card.querySelector<HTMLElement>(".proj__inner");
+      const spot = card.querySelector<HTMLElement>(".proj__spot");
+      const MAX = 5; // degrees
+
+      const onMove = (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        if (inner) {
+          inner.style.setProperty("--ry", `${(px - 0.5) * MAX * 2}deg`);
+          inner.style.setProperty("--rx", `${(0.5 - py) * MAX * 2}deg`);
+        }
+        if (spot) {
+          spot.style.setProperty("--mx", `${px * 100}%`);
+          spot.style.setProperty("--my", `${py * 100}%`);
+        }
+      };
+      const reset = () => {
+        if (!inner) return;
+        inner.style.setProperty("--rx", "0deg");
+        inner.style.setProperty("--ry", "0deg");
+      };
+
+      card.addEventListener("pointermove", onMove);
+      card.addEventListener("pointerleave", reset);
+    });
+  }
+</script>

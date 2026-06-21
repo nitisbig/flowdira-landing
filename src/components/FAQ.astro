@@ -1,0 +1,292 @@
+---
+/* FAQ — written around the questions decision-makers actually search
+   before hiring a web + AI studio. Doubles as SEO surface: the same
+   data renders an accessible accordion AND FAQPage structured data. */
+import BrandMark from "./BrandMark.astro";
+
+const faqs = [
+  {
+    q: "How much does it cost to design and build a website?",
+    a: "Most projects land between a focused marketing site and a larger, AI-integrated web app, and we price each one to scope. You get a fixed quote up front — so you know the full investment before we start, with no surprise invoices later.",
+  },
+  {
+    q: "How long does it take to build a professional website?",
+    a: "A typical marketing site goes from kickoff to launch in about two weeks; larger builds with custom functionality or AI features take four to eight. You'll have a clear timeline with milestones on day one, and we ship in stages so you can see progress the whole way.",
+  },
+  {
+    q: "Is a custom website worth it versus a template builder like Wix or WordPress?",
+    a: "Templates are fine to start, but they cap how fast you load, how well you rank, and how far you can customise as you grow. A custom Flowdira site is built lean for 90+ Lighthouse scores, owns its own code, and is designed around your conversions — which usually pays for itself in performance and trust.",
+  },
+  {
+    q: "How can AI integration actually help my business?",
+    a: "We add AI where it removes real work — support chatbots, smart search, lead qualification, content drafting and workflow automation using the latest LLMs. The goal is always measurable: faster responses, fewer manual tasks, and features your customers genuinely feel.",
+  },
+  {
+    q: "Will my website be optimised for Google and SEO?",
+    a: "Yes. Every build ships with clean semantic markup, fast Core Web Vitals, structured data, sitemaps and metadata baked in — the technical foundation Google rewards. We design for both search engines and the humans who convert once they arrive.",
+  },
+  {
+    q: "Do you provide ongoing support and maintenance after launch?",
+    a: "Absolutely. Launch is the start, not the finish — we offer care plans for updates, monitoring, performance and new features, and you always own your code and hosting. Many clients keep us on as their ongoing web and AI partner.",
+  },
+  {
+    q: "Why hire a studio instead of a freelancer or an in-house hire?",
+    a: "With Flowdira you get design, development and AI in one team — no handoffs, no gaps, no single point of failure. You move faster than hiring in-house and get more senior, accountable work than juggling separate freelancers.",
+  },
+  {
+    q: "Can you redesign or rebuild my existing website?",
+    a: "Yes — redesigns and migrations are a big part of what we do. We audit what you have, keep what's already working for your SEO and brand, and rebuild the rest on a faster, modern stack so you don't lose rankings in the move.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<section class="faq section" id="faq">
+  <div class="container faq__grid">
+    <!-- Left — sticky intro -->
+    <aside class="faq__intro" data-reveal="left">
+      <p class="eyebrow">Questions, answered</p>
+      <h2 class="faq__title">
+        Everything you'd ask<br />
+        <span class="serif-italic">before saying yes.</span>
+      </h2>
+      <p class="faq__lede">
+        The honest answers founders and CEOs look for before choosing a web &amp;
+        AI partner — pricing, timelines, SEO and support.
+      </p>
+      <a class="btn btn--blue faq__cta" href="/#contact">
+        Still have questions? Talk to us
+        <span class="btn__arrow">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M4 12L12 4M12 4H6M12 4V10"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+      </a>
+      <span class="faq__watermark" data-parallax style="--parallax: 70px" aria-hidden="true">
+        <BrandMark size={88} />
+      </span>
+    </aside>
+
+    <!-- Right — accordion -->
+    <div class="faq__list" data-faq>
+      {
+        faqs.map((f, i) => (
+          <div class="faq__item" data-reveal style={`--reveal-delay: ${i * 50}ms`}>
+            <h3 class="faq__q-wrap">
+              <button
+                class="faq__q"
+                type="button"
+                aria-expanded="false"
+                aria-controls={`faq-panel-${i}`}
+                id={`faq-q-${i}`}
+              >
+                <span class="faq__q-text">{f.q}</span>
+                <span class="faq__icon" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none" width="15" height="15">
+                    <path
+                      d="M8 3v10M3 8h10"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </h3>
+            <div
+              class="faq__a"
+              id={`faq-panel-${i}`}
+              role="region"
+              aria-labelledby={`faq-q-${i}`}
+            >
+              <div class="faq__a-inner">
+                <p>{f.a}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(faqSchema)}
+  />
+</section>
+
+<style>
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  /* ---- intro ---- */
+  .faq__intro {
+    position: sticky;
+    top: 6.5rem;
+  }
+  .faq__title {
+    font-size: clamp(2.1rem, 4.5vw, 3.2rem);
+    margin-top: 1rem;
+  }
+  .faq__title .serif-italic {
+    color: var(--blue);
+  }
+  .faq__lede {
+    margin-top: 1.1rem;
+    max-width: 24rem;
+    color: var(--muted);
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+  .faq__cta {
+    margin-top: 1.8rem;
+  }
+  .faq__watermark {
+    display: block;
+    margin-top: 2.5rem;
+    color: var(--blue-soft);
+  }
+
+  /* ---- accordion ---- */
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .faq__item {
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    background: var(--paper-raised);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease),
+      background 0.4s var(--ease);
+  }
+  .faq__item:hover {
+    border-color: var(--blue-line);
+  }
+  .faq__item.is-open {
+    border-color: var(--blue-line);
+    box-shadow: var(--shadow-float);
+  }
+
+  .faq__q-wrap {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: normal;
+  }
+  .faq__q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.2rem 1.4rem;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.22rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    transition: color 0.3s var(--ease);
+  }
+  .faq__item.is-open .faq__q {
+    color: var(--blue-ink);
+  }
+
+  .faq__icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: var(--blue);
+    background: var(--blue-soft);
+    transition: transform 0.45s var(--ease-spring), background 0.35s var(--ease),
+      color 0.35s var(--ease);
+  }
+  .faq__item.is-open .faq__icon {
+    transform: rotate(135deg);
+    background: var(--blue-grad);
+    color: #fff;
+  }
+
+  .faq__a {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s var(--ease);
+  }
+  .faq__item.is-open .faq__a {
+    grid-template-rows: 1fr;
+  }
+  .faq__a-inner {
+    overflow: hidden;
+  }
+  .faq__a-inner p {
+    padding: 0 3.6rem 1.4rem 1.4rem;
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
+
+  @media (max-width: 860px) {
+    .faq__grid {
+      grid-template-columns: 1fr;
+    }
+    .faq__intro {
+      position: static;
+    }
+    .faq__watermark {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Accessible single-open accordion. Animation is pure CSS (grid-rows);
+  // JS only flips the open state + ARIA so it degrades gracefully.
+  const root = document.querySelector<HTMLElement>("[data-faq]");
+  if (root) {
+    const buttons = root.querySelectorAll<HTMLButtonElement>(".faq__q");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".faq__item");
+        if (!item) return;
+        const isOpen = item.classList.contains("is-open");
+
+        // close siblings for a tidy, single-open accordion
+        root.querySelectorAll(".faq__item.is-open").forEach((el) => {
+          if (el !== item) {
+            el.classList.remove("is-open");
+            el.querySelector(".faq__q")?.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        item.classList.toggle("is-open", !isOpen);
+        btn.setAttribute("aria-expanded", String(!isOpen));
+      });
+    });
+  }
+</script>

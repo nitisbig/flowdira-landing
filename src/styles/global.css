@@ -27,6 +27,16 @@
   --gold-deep: #a07f44;
   --clay: #b5673f;
 
+  /* ---- Brand blue (from the Flowdira logo) ---- */
+  --blue: #0a72f7;
+  --blue-deep: #0031ba;
+  --blue-bright: #16a0fa;
+  --blue-ink: #0a2a63;
+  --blue-soft: rgba(10, 114, 247, 0.1);
+  --blue-line: rgba(10, 114, 247, 0.24);
+  --blue-grad: linear-gradient(140deg, #16a0fa 0%, #0a72f7 48%, #0031ba 100%);
+  --blue-glow: 0 12px 30px -12px rgba(10, 114, 247, 0.55);
+
   /* ---- Lines & fills ---- */
   --line: rgba(22, 20, 13, 0.12);
   --line-strong: rgba(22, 20, 13, 0.22);
@@ -289,6 +299,15 @@ h3 {
   --btn-fg: var(--ink);
 }
 
+.btn--blue {
+  --btn-bg: var(--blue);
+  --btn-fg: #fff;
+  background: var(--blue-grad);
+}
+.btn--blue:hover {
+  box-shadow: var(--blue-glow);
+}
+
 .btn--block {
   width: 100%;
   justify-content: center;
@@ -346,19 +365,86 @@ h3 {
 }
 
 /* ============================================================
-   Scroll reveal
+   Scroll reveal — directional, scale & blur variants
    ============================================================ */
 [data-reveal] {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
+}
+
+[data-reveal="left"] {
+  transform: translateX(-34px);
+}
+[data-reveal="right"] {
+  transform: translateX(34px);
+}
+[data-reveal="scale"] {
+  transform: scale(0.94);
+}
+[data-reveal="blur"] {
+  filter: blur(10px);
+  transform: translateY(20px);
 }
 
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  filter: none;
+}
+
+/* ============================================================
+   Scroll progress bar (top of viewport) — native scroll-timeline
+   ============================================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 300;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  background: var(--blue-grad);
+  box-shadow: 0 0 12px rgba(10, 114, 247, 0.45);
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    transform: scaleX(0);
+    animation: progress-grow linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes progress-grow {
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* ============================================================
+   Native scroll-driven helpers (progressive enhancement)
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-parallax] {
+      animation: parallax-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 60%;
+    }
+    @keyframes parallax-rise {
+      from {
+        transform: translateY(var(--parallax, 40px));
+      }
+      to {
+        transform: translateY(calc(var(--parallax, 40px) * -0.4));
+      }
+    }
+  }
 }
 
 /* ============================================================
