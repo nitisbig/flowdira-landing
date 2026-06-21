@@ -8,7 +8,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "shots": "node scripts/shoot.mjs && node scripts/optimize.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
@@ -16,5 +17,9 @@
     "@fontsource-variable/hanken-grotesk": "^5.1.0",
     "astro": "^5.2.5",
     "lenis": "^1.3.23"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.0",
+    "sharp": "^0.35.2"
   }
 }

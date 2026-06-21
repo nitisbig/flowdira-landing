@@ -1,73 +1,81 @@
 ---
-import BrandMark from "./BrandMark.astro";
-
-// Real, shipped work — fetched from GitHub + live on Vercel & Cloudflare.
+// Real, shipped work — live on Vercel, previewed with actual screenshots.
 const projects = [
   {
-    theme: "editor",
-    title: "HTML Website Editor",
-    cat: "Visual web editor · Design + Build",
-    repo: "nitisbig/html-website-editor",
-    url: "https://html-website-editor.vercel.app",
-    host: "html-website-editor.vercel.app",
+    img: "/work/portfolio.webp",
+    title: "Nitesh — Portfolio",
+    cat: "Personal developer portfolio · Design + Build",
+    repo: "nitisbig/portfolio-site",
+    url: "https://portfolio-site-three-coral.vercel.app/",
+    host: "portfolio-site-three-coral.vercel.app",
     platform: "vercel",
-    tags: ["React", "TypeScript", "Vite"],
+    tags: ["Astro", "Tailwind", "Editorial"],
   },
   {
-    theme: "ai",
-    title: "URL2Design",
-    cat: "AI design from any URL · Build + AI",
-    repo: "nitisbig/url2design",
-    url: "https://url2design.niteshghimire223.workers.dev/",
-    host: "url2design.niteshghimire223.workers.dev",
-    platform: "cloudflare",
-    tags: ["Next.js", "AI", "Workers"],
-  },
-  {
-    theme: "commerce",
-    title: "Gracias Carpentry",
-    cat: "Business website · Design + Build",
-    repo: "nitisbig/gracias-capentry",
-    url: "https://gracias-capentry.vercel.app",
-    host: "gracias-capentry.vercel.app",
+    img: "/work/maintenance.webp",
+    title: "The Maintenance Man",
+    cat: "Home-services business site · Design + Build",
+    repo: null,
+    url: "https://themaintenanceman.vercel.app/",
+    host: "themaintenanceman.vercel.app",
     platform: "vercel",
-    tags: ["Astro", "Responsive", "SEO"],
+    tags: ["Responsive", "SEO", "Local business"],
   },
   {
-    theme: "api",
-    title: "Email Verifier",
-    cat: "Email verification API · Build",
-    repo: "nitisbig/email-verifier-freetiercloudflare",
-    url: "https://email-verifier.niteshghimire223.workers.dev/",
-    host: "email-verifier.niteshghimire223.workers.dev",
-    platform: "cloudflare",
-    tags: ["Workers", "TypeScript", "API"],
+    img: "/work/appointment.webp",
+    title: "BrightSmile Dental",
+    cat: "Dental booking experience · Design + Build",
+    repo: "nitisbig/appointment-system",
+    url: "https://appointment-system-vert-five.vercel.app/",
+    host: "appointment-system-vert-five.vercel.app",
+    platform: "vercel",
+    tags: ["Next.js", "TypeScript", "Booking"],
   },
   {
-    theme: "studio",
-    title: "Takeaway",
-    cat: "Minimal notes app · Build + AI",
+    img: "/work/takeaway.webp",
+    title: "Takeaways",
+    cat: "Minimal notes app · Design + Build",
     repo: "nitisbig/takeaway",
-    url: "https://takeaway-weld.vercel.app",
+    url: "https://takeaway-weld.vercel.app/",
     host: "takeaway-weld.vercel.app",
     platform: "vercel",
     tags: ["SvelteKit", "Supabase", "Vercel"],
   },
   {
-    theme: "analytics",
-    title: "Trading Journal",
-    cat: "Product landing page · Design + Build",
-    repo: "nitisbig/trading-journal-landing",
-    url: "https://0d0d6a8d.trading-journal-landing.pages.dev/",
-    host: "trading-journal-landing.pages.dev",
-    platform: "cloudflare",
-    tags: ["Astro", "Pages", "Tailwind"],
+    img: "/work/claude-guide.webp",
+    title: "Claude Code Guide",
+    cat: "Interactive learning app · Design + Build",
+    repo: "nitisbig/claude-code-guide",
+    url: "https://claude-code-guide-eosin-delta.vercel.app/",
+    host: "claude-code-guide-eosin-delta.vercel.app",
+    platform: "vercel",
+    tags: ["Next.js", "TypeScript", "Education"],
+  },
+  {
+    img: "/work/explorative.webp",
+    title: "Explorative Giants",
+    cat: "Philosophy reference · Design + Build",
+    repo: "nitisbig/explorative-giants",
+    url: "https://explorative-giants.vercel.app/",
+    host: "explorative-giants.vercel.app",
+    platform: "vercel",
+    tags: ["Next.js", "TypeScript", "Tailwind"],
+  },
+  {
+    img: "/work/interstellar.webp",
+    title: "Interstellar — Gargantua",
+    cat: "Audio-reactive WebGL visualizer · Build + Motion",
+    repo: "nitisbig/interstellar",
+    url: "https://interstellar-phi-eosin.vercel.app/",
+    host: "interstellar-phi-eosin.vercel.app",
+    platform: "vercel",
+    tags: ["Canvas", "WebGL", "Audio-reactive"],
   },
 ];
 
 const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
 // bento rhythm — these indices render as full-width feature cards
-const featureIndices = new Set([0, 3]);
+const featureIndices = new Set([0, 3, 6]);
 ---
 
 <section class="work section" id="work">
@@ -117,7 +125,13 @@ const featureIndices = new Set([0, 3]);
             <div class="proj__inner">
               <span class="proj__spot" aria-hidden="true" />
 
-              <div class:list={["proj__preview", `t-${p.theme}`]}>
+              <a
+                class="proj__preview"
+                href={p.url}
+                target="_blank"
+                rel="noopener"
+                aria-label={`Open ${p.title} live`}
+              >
                 <div class="proj__chrome">
                   <span class="proj__dots">
                     <i /><i /><i />
@@ -125,92 +139,16 @@ const featureIndices = new Set([0, 3]);
                   <span class="proj__addr">{p.host}</span>
                 </div>
 
-                <div class="proj__screen">
-                  {p.theme === "editor" && (
-                    <div class="m-editor">
-                      <div class="m-toolbar">
-                        <span /><span /><span /><i />
-                      </div>
-                      <div class="m-canvas">
-                        <span class="m-line m-line--lg" />
-                        <span class="m-line" />
-                        <span class="m-sel">
-                          <span class="m-line m-line--sm" />
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {p.theme === "ai" && (
-                    <div class="m-ai">
-                      <div class="m-side">
-                        <span /><span /><span />
-                      </div>
-                      <div class="m-chat">
-                        <span class="m-msg m-msg--in" />
-                        <span class="m-msg m-msg--out" />
-                        <span class="m-msg m-msg--in m-msg--sm" />
-                        <span class="m-prompt" />
-                      </div>
-                    </div>
-                  )}
-                  {p.theme === "commerce" && (
-                    <div class="m-commerce">
-                      <div class="m-bar">
-                        <span class="m-brand">
-                          <BrandMark size={10} /> Gracias
-                        </span>
-                        <span class="m-cart" />
-                      </div>
-                      <div class="m-grid">
-                        <span /><span /><span /><span /><span /><span />
-                      </div>
-                    </div>
-                  )}
-                  {p.theme === "api" && (
-                    <div class="m-api">
-                      <div class="m-req">
-                        <span class="m-method">POST</span>
-                        <span class="m-path" />
-                      </div>
-                      <div class="m-res">
-                        <span class="m-json" />
-                        <span class="m-json m-json--sm" />
-                        <span class="m-valid">
-                          <svg viewBox="0 0 16 16" fill="none" width="9" height="9">
-                            <path
-                              d="M3 8.5 6.5 12 13 4.5"
-                              stroke="currentColor"
-                              stroke-width="2.2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                          deliverable
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {p.theme === "studio" && (
-                    <div class="m-studio">
-                      <span class="m-eyebrow" />
-                      <p class="m-headline">One lesson<br />worth keeping</p>
-                      <div class="m-thumbs">
-                        <span /><span /><span />
-                      </div>
-                    </div>
-                  )}
-                  {p.theme === "analytics" && (
-                    <div class="m-analytics">
-                      <div class="m-stats">
-                        <span /><span /><span />
-                      </div>
-                      <div class="m-chart">
-                        <i style="height:40%" /><i style="height:70%" />
-                        <i style="height:55%" /><i style="height:90%" />
-                        <i style="height:65%" /><i style="height:100%" />
-                      </div>
-                    </div>
-                  )}
+                <div class="proj__shot-wrap">
+                  <img
+                    class="proj__shot"
+                    src={p.img}
+                    alt={`${p.title} — live site preview`}
+                    width="1280"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
 
                 <span class:list={["proj__deploy", `proj__deploy--${p.platform}`]}>
@@ -225,7 +163,7 @@ const featureIndices = new Set([0, 3]);
                   )}
                   Live
                 </span>
-              </div>
+              </a>
 
               <div class="proj__meta">
                 <div class="proj__line">
@@ -250,17 +188,19 @@ const featureIndices = new Set([0, 3]);
                 </div>
                 <p class="proj__cat">{p.cat}</p>
 
-                <a
-                  class="proj__repo"
-                  href={`https://github.com/${p.repo}`}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
-                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z" />
-                  </svg>
-                  <span class="proj__repo-name">{p.repo}</span>
-                </a>
+                {p.repo && (
+                  <a
+                    class="proj__repo"
+                    href={`https://github.com/${p.repo}`}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
+                      <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z" />
+                    </svg>
+                    <span class="proj__repo-name">{p.repo}</span>
+                  </a>
+                )}
 
                 <div class="proj__foot">
                   <div class="proj__tags">
@@ -453,12 +393,15 @@ const featureIndices = new Set([0, 3]);
 
   .proj__preview {
     position: relative;
+    display: flex;
+    flex-direction: column;
     margin: 0.6rem 0.6rem 0;
     border-radius: var(--r-md);
     overflow: hidden;
     aspect-ratio: 16 / 10;
     background: var(--paper-sunk);
     border: 1px solid var(--hairline);
+    cursor: pointer;
   }
   .proj--feature .proj__preview {
     aspect-ratio: auto;
@@ -492,10 +435,22 @@ const featureIndices = new Set([0, 3]);
     text-overflow: ellipsis;
   }
 
-  .proj__screen {
-    position: absolute;
-    inset: 1.85rem 0 0;
-    padding: 0.7rem;
+  /* real screenshot fills the viewport area below the chrome */
+  .proj__shot-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .proj__shot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.6s var(--ease);
+  }
+  .proj:hover .proj__shot {
+    transform: scale(1.035);
   }
 
   .proj__deploy {
@@ -516,322 +471,6 @@ const featureIndices = new Set([0, 3]);
   .proj__deploy--cloudflare {
     color: #4a2e05;
     background: color-mix(in srgb, var(--gold) 90%, transparent);
-  }
-
-  /* ---- mocks ---- */
-  /* editor */
-  .t-editor {
-    background: linear-gradient(180deg, #f5f0e6, #ece2d0);
-  }
-  .m-editor {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-  .m-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 0.4rem;
-    border-radius: var(--r-pill);
-    background: var(--forest);
-    align-self: flex-start;
-  }
-  .m-toolbar span {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 0.2rem;
-    background: rgba(237, 231, 216, 0.55);
-  }
-  .m-toolbar i {
-    width: 0.7rem;
-    height: 0.5rem;
-    border-radius: 0.2rem;
-    background: var(--blue-bright);
-  }
-  .m-canvas {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    padding: 0.55rem;
-    border-radius: 0.5rem;
-    background: #fff;
-    border: 1px solid rgba(22, 20, 13, 0.08);
-  }
-  .m-line {
-    height: 0.5rem;
-    border-radius: var(--r-pill);
-    background: var(--paper-sunk);
-    width: 90%;
-  }
-  .m-line--lg {
-    height: 0.85rem;
-    width: 65%;
-    background: var(--forest);
-  }
-  .m-line--sm {
-    width: 55%;
-    margin: 0;
-  }
-  .m-sel {
-    padding: 0.3rem;
-    border-radius: 0.35rem;
-    border: 1.5px dashed var(--blue);
-    position: relative;
-  }
-  .m-sel::after {
-    content: "";
-    position: absolute;
-    right: -3px;
-    bottom: -3px;
-    width: 0.4rem;
-    height: 0.4rem;
-    border-radius: 50%;
-    background: var(--blue);
-  }
-
-  /* ai */
-  .t-ai {
-    background: linear-gradient(160deg, #0a1f4a, #051028);
-  }
-  .m-ai {
-    height: 100%;
-    display: flex;
-    gap: 0.45rem;
-  }
-  .m-side {
-    width: 22%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-  .m-side span {
-    height: 0.5rem;
-    border-radius: var(--r-pill);
-    background: rgba(237, 231, 216, 0.16);
-  }
-  .m-side span:first-child {
-    background: var(--blue-bright);
-    width: 80%;
-  }
-  .m-chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    justify-content: flex-end;
-  }
-  .m-msg {
-    height: 0.85rem;
-    border-radius: 0.5rem;
-  }
-  .m-msg--in {
-    width: 70%;
-    background: rgba(237, 231, 216, 0.14);
-  }
-  .m-msg--out {
-    width: 55%;
-    align-self: flex-end;
-    background: var(--blue);
-  }
-  .m-msg--sm {
-    width: 45%;
-  }
-  .m-prompt {
-    height: 1.1rem;
-    border-radius: var(--r-pill);
-    background: rgba(237, 231, 216, 0.1);
-    border: 1px solid rgba(237, 231, 216, 0.16);
-    margin-top: 0.2rem;
-  }
-
-  /* commerce */
-  .t-commerce {
-    background: linear-gradient(180deg, #f4eee2, #ece2d0);
-  }
-  .m-commerce {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .m-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .m-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: var(--forest);
-  }
-  .m-cart {
-    width: 1.2rem;
-    height: 0.55rem;
-    border-radius: var(--r-pill);
-    background: var(--forest);
-  }
-  .m-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-    flex: 1;
-  }
-  .m-grid span {
-    border-radius: 0.4rem;
-    background: #fff;
-    border: 1px solid rgba(22, 20, 13, 0.08);
-  }
-  .m-grid span:nth-child(2) {
-    background: var(--forest);
-  }
-  .m-grid span:nth-child(5) {
-    background: var(--gold);
-  }
-
-  /* api */
-  .t-api {
-    background: linear-gradient(160deg, #0a1f4a, #051028);
-  }
-  .m-api {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-    justify-content: center;
-  }
-  .m-req {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-  .m-method {
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #fff;
-    background: var(--blue);
-    padding: 0.18em 0.45em;
-    border-radius: 0.3rem;
-  }
-  .m-path {
-    flex: 1;
-    height: 0.55rem;
-    border-radius: var(--r-pill);
-    background: rgba(237, 231, 216, 0.16);
-  }
-  .m-res {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 0.55rem;
-    border-radius: 0.5rem;
-    background: rgba(237, 231, 216, 0.06);
-    border: 1px solid rgba(237, 231, 216, 0.12);
-  }
-  .m-json {
-    height: 0.45rem;
-    width: 80%;
-    border-radius: var(--r-pill);
-    background: rgba(237, 231, 216, 0.18);
-  }
-  .m-json--sm {
-    width: 55%;
-  }
-  .m-valid {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    margin-top: 0.1rem;
-    font-size: 0.55rem;
-    font-weight: 600;
-    color: #7fd6a0;
-  }
-
-  /* studio */
-  .t-studio {
-    background: linear-gradient(180deg, #f6f1e7, #efe7d8);
-  }
-  .m-studio {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .m-eyebrow {
-    width: 2.5rem;
-    height: 0.4rem;
-    border-radius: var(--r-pill);
-    background: var(--blue);
-  }
-  .m-headline {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    margin: 0.4rem 0 auto;
-  }
-  .m-thumbs {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-  }
-  .m-thumbs span {
-    height: 1.4rem;
-    border-radius: 0.4rem;
-    background: #fff;
-    border: 1px solid rgba(22, 20, 13, 0.08);
-  }
-  .m-thumbs span:nth-child(2) {
-    background: var(--forest);
-  }
-
-  /* analytics */
-  .t-analytics {
-    background: linear-gradient(180deg, #f3eee3, #e9e0d0);
-  }
-  .m-analytics {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-  .m-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-  }
-  .m-stats span {
-    height: 1.1rem;
-    border-radius: 0.4rem;
-    background: #fff;
-    border: 1px solid rgba(22, 20, 13, 0.08);
-  }
-  .m-stats span:first-child {
-    background: var(--forest);
-  }
-  .m-chart {
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.3rem;
-    padding-top: 0.2rem;
-  }
-  .m-chart i {
-    flex: 1;
-    border-radius: 0.25rem 0.25rem 0 0;
-    background: var(--forest-soft);
-  }
-  .m-chart i:nth-child(4) {
-    background: var(--blue);
-  }
-  .m-chart i:last-child {
-    background: var(--forest);
   }
 
   /* ---- meta ---- */
