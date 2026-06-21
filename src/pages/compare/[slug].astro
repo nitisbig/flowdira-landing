@@ -1,0 +1,102 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import RelatedLinks from "../../components/pseo/RelatedLinks.astro";
+import { comparisons, getComparison } from "../../data/comparisons";
+import { absUrl, faqSchema, type RelatedLink } from "../../lib/pseo";
+
+export function getStaticPaths() {
+  return comparisons.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const data = getComparison(slug!)!;
+const path = `/compare/${data.slug}/`;
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Compare", href: "/compare/" },
+  { label: `${data.optionA} vs ${data.optionB}`, href: path },
+];
+
+const idx = comparisons.findIndex((c) => c.slug === data.slug);
+const siblings = [1, 2, 3].map((n) => comparisons[(idx + n) % comparisons.length]);
+const related: RelatedLink[] = [
+  ...siblings.map((s) => ({
+    label: `${s.optionA} vs ${s.optionB}`,
+    href: `/compare/${s.slug}/`,
+    note: "Honest comparison",
+  })),
+  {
+    label: "What is a headless CMS?",
+    href: "/glossary/headless-cms/",
+    note: "Plain-English explainer",
+  },
+  {
+    label: "Website design by industry",
+    href: "/web-design-for/",
+    note: "Built for your sector",
+  },
+];
+---
+
+<PseoShell
+  title={data.title}
+  description={data.description}
+  canonical={absUrl(path)}
+  eyebrow="Comparison"
+  h1={`${data.optionA} vs ${data.optionB}`}
+  lede={data.lede}
+  crumbs={crumbs}
+  schema={[faqSchema(data.faqs)]}
+  ctaHeading="Not sure which is right for you?"
+  ctaText="Tell us about your project and we'll recommend the approach that actually fits — no upsell."
+>
+  <h1 slot="h1">
+    {data.optionA} <span class="serif-italic">vs</span> {data.optionB}
+  </h1>
+
+  <div class="pseo-prose" data-reveal>
+    {data.intro.map((p) => <p>{p}</p>)}
+
+    <h2>{data.optionA} vs {data.optionB}, side by side</h2>
+    <div class="pseo-table-wrap">
+      <table class="pseo-table">
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th>{data.optionA}</th>
+            <th>{data.optionB}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            data.rows.map((r) => (
+              <tr>
+                <td>{r.aspect}</td>
+                <td>{r.a}</td>
+                <td>{r.b}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Our honest take</h2>
+    {data.verdict.map((p) => <p>{p}</p>)}
+
+    <h2>FAQs</h2>
+    <div class="pseo-faq">
+      {
+        data.faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="pseo-faq__a">{f.a}</div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+
+  <RelatedLinks links={related} />
+</PseoShell>

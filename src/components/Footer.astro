@@ -23,6 +23,15 @@ const columns = [
       { label: "Start a Project", href: "/#contact" },
     ],
   },
+  {
+    title: "Explore",
+    links: [
+      { label: "Web design by industry", href: "/web-design-for/" },
+      { label: "Build comparisons", href: "/compare/" },
+      { label: "Web & AI glossary", href: "/glossary/" },
+      { label: "Where we work", href: "/web-design/" },
+    ],
+  },
 ];
 
 const socials = [
@@ -151,7 +160,7 @@ const socials = [
 
   .footer__top {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
     gap: clamp(2rem, 5vw, 4rem);
     padding-bottom: 3rem;
   }
@@ -188,8 +197,14 @@ const socials = [
 
   .footer__cols {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    .footer__cols {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem 1rem;
+    }
   }
   .footer__heading {
     font-family: var(--font-sans);

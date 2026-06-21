@@ -616,3 +616,397 @@ h3 {
 .legal__back:hover {
   color: var(--forest);
 }
+
+/* ============================================================
+   Programmatic SEO pages (industry / comparison / glossary /
+   region). Shared chrome + prose so every templated page matches
+   the editorial system. Namespaced under .pseo-*.
+   ============================================================ */
+.pseo {
+  padding-block: clamp(2.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem);
+}
+
+/* ---- breadcrumbs ---- */
+.pseo-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.pseo-crumbs a {
+  color: var(--muted);
+  transition: color 0.3s var(--ease);
+}
+.pseo-crumbs a:hover {
+  color: var(--blue);
+}
+.pseo-crumbs [aria-current] {
+  color: var(--ink-2);
+  font-weight: 540;
+}
+.pseo-crumbs .sep {
+  color: var(--muted-2);
+}
+
+/* ---- hero ---- */
+.pseo-hero {
+  max-width: 52rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.pseo-hero h1 {
+  font-size: clamp(2.3rem, 5.5vw, 3.7rem);
+  margin-top: 1rem;
+}
+.pseo-hero h1 .serif-italic {
+  color: var(--blue);
+}
+.pseo-lede {
+  margin-top: 1.2rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.22rem);
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 44rem;
+}
+
+/* ---- body grid (main + sticky aside) ---- */
+.pseo-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+@media (min-width: 940px) {
+  .pseo-body.has-aside {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.85fr);
+    align-items: start;
+  }
+}
+.pseo-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+@media (min-width: 940px) {
+  .pseo-aside {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+/* ---- prose ---- */
+.pseo-prose > * + * {
+  margin-top: 1.1rem;
+}
+.pseo-prose h2 {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+.pseo-prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.75rem;
+}
+.pseo-prose p,
+.pseo-prose li {
+  color: var(--ink-2);
+  font-size: 1.02rem;
+  line-height: 1.72;
+}
+.pseo-prose a {
+  color: var(--blue);
+  font-weight: 540;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--blue-line);
+}
+.pseo-prose a:hover {
+  text-decoration-color: var(--blue);
+}
+.pseo-prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- block cards (pains / features) ---- */
+.pseo-cards {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+@media (min-width: 620px) {
+  .pseo-cards.cols-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.pseo-card {
+  padding: 1.4rem 1.5rem;
+  border-radius: var(--r-md);
+  background: var(--paper-raised);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-card);
+}
+.pseo-card h3 {
+  font-size: 1.12rem;
+  margin: 0 0 0.5rem;
+}
+.pseo-card p {
+  margin: 0;
+  font-size: 0.96rem;
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+/* ---- comparison table ---- */
+.pseo-table-wrap {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+.pseo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.pseo-table th,
+.pseo-table td {
+  text-align: left;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+.pseo-table thead th {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--paper-sunk);
+}
+.pseo-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.pseo-table td:first-child {
+  font-weight: 540;
+  color: var(--ink-2);
+}
+
+/* ---- inline FAQ on pSEO pages ---- */
+.pseo-faq {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.pseo-faq details {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.pseo-faq summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1.1rem 1.3rem;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.pseo-faq summary::-webkit-details-marker {
+  display: none;
+}
+.pseo-faq summary::after {
+  content: "+";
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  color: var(--blue);
+  transition: transform 0.35s var(--ease-spring);
+}
+.pseo-faq details[open] summary {
+  color: var(--blue-ink);
+}
+.pseo-faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+.pseo-faq .pseo-faq__a {
+  padding: 0 1.3rem 1.2rem;
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  line-height: 1.68;
+}
+
+/* ---- related-links grid ---- */
+.pseo-related {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: clamp(2.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--hairline);
+}
+.pseo-related h2 {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+.pseo-related__grid {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 620px) {
+  .pseo-related__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 940px) {
+  .pseo-related__grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+.pseo-related__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--r-md);
+  background: var(--paper-raised);
+  border: 1px solid var(--hairline);
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+.pseo-related__item:hover {
+  transform: translateY(-3px);
+  border-color: var(--blue-line);
+  box-shadow: var(--shadow-card);
+}
+.pseo-related__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.pseo-related__item:hover .pseo-related__label {
+  color: var(--blue);
+}
+.pseo-related__note {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ---- aside CTA card ---- */
+.pseo-aside-cta {
+  padding: 1.6rem;
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(120% 80% at 90% 0%, rgba(22, 160, 250, 0.28), transparent 55%),
+    var(--forest);
+  color: var(--on-forest);
+  border: 1px solid var(--forest-line);
+}
+.pseo-aside-cta h2 {
+  font-size: 1.35rem;
+  color: var(--on-forest);
+  margin: 0 0 0.6rem;
+}
+.pseo-aside-cta p {
+  font-size: 0.95rem;
+  color: var(--on-forest-mut);
+  line-height: 1.6;
+  margin: 0 0 1.2rem;
+}
+
+/* ---- full-width CTA band ---- */
+.pseo-cta {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding: clamp(2.25rem, 5vw, 3.5rem);
+  border-radius: var(--r-xl);
+  text-align: center;
+  background:
+    radial-gradient(90% 120% at 50% -20%, rgba(22, 160, 250, 0.22), transparent 60%),
+    var(--forest);
+  color: var(--on-forest);
+  border: 1px solid var(--forest-line);
+}
+.pseo-cta h2 {
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  color: var(--on-forest);
+}
+.pseo-cta p {
+  margin: 1rem auto 0;
+  max-width: 34rem;
+  color: var(--on-forest-mut);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+.pseo-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1.8rem;
+}
+
+/* ---- hub index grids ---- */
+.pseo-hub__grid {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .pseo-hub__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 980px) {
+  .pseo-hub__grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+.pseo-hub__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: var(--r-lg);
+  background: var(--paper-raised);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+}
+.pseo-hub__card:hover {
+  transform: translateY(-5px);
+  border-color: var(--blue-line);
+  box-shadow: var(--shadow-float);
+}
+.pseo-hub__card h2,
+.pseo-hub__card h3 {
+  font-size: 1.3rem;
+  margin: 0;
+}
+.pseo-hub__card:hover h2,
+.pseo-hub__card:hover h3 {
+  color: var(--blue);
+}
+.pseo-hub__card p {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+.pseo-hub__more {
+  margin-top: auto;
+  padding-top: 0.4rem;
+  font-size: 0.86rem;
+  font-weight: 540;
+  color: var(--blue);
+}

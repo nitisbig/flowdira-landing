@@ -1,0 +1,25 @@
+---
+/* Accessible breadcrumb trail. Emits BreadcrumbList JSON-LD via the
+   parent shell (which owns the <head> graph), so this only renders UI. */
+import type { Crumb } from "../../lib/pseo";
+
+interface Props {
+  crumbs: Crumb[];
+}
+const { crumbs } = Astro.props;
+---
+
+<nav class="pseo-crumbs" aria-label="Breadcrumb">
+  {
+    crumbs.map((c, i) => (
+      <>
+        {i === crumbs.length - 1 ? (
+          <span aria-current="page">{c.label}</span>
+        ) : (
+          <a href={c.href}>{c.label}</a>
+        )}
+        {i < crumbs.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+      </>
+    ))
+  }
+</nav>

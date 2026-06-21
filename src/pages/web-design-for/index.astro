@@ -1,0 +1,44 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import { industries } from "../../data/industries";
+import { absUrl } from "../../lib/pseo";
+
+const path = "/web-design-for/";
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Web design by industry", href: path },
+];
+
+const itemList = {
+  "@type": "ItemList",
+  itemListElement: industries.map((i, n) => ({
+    "@type": "ListItem",
+    position: n + 1,
+    name: `Website design for ${i.audience}`,
+    url: absUrl(`/web-design-for/${i.slug}/`),
+  })),
+};
+---
+
+<PseoShell
+  title="Website Design by Industry | Flowdira"
+  description="Industry-specific website design and development — from dentists and law firms to SaaS startups and ecommerce brands. See how Flowdira builds for your sector."
+  canonical={absUrl(path)}
+  eyebrow="By industry"
+  h1="Website design, tailored to your industry"
+  lede="Every sector sells differently. We build websites around how your specific customers decide — pick your industry to see how."
+  crumbs={crumbs}
+  schema={[itemList]}
+>
+  <div class="pseo-hub__grid">
+    {
+      industries.map((i) => (
+        <a class="pseo-hub__card" href={`/web-design-for/${i.slug}/`}>
+          <h2>{i.name}</h2>
+          <p>{i.lede}</p>
+          <span class="pseo-hub__more">Web design for {i.audience} →</span>
+        </a>
+      ))
+    }
+  </div>
+</PseoShell>

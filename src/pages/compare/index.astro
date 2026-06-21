@@ -1,0 +1,46 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import { comparisons } from "../../data/comparisons";
+import { absUrl } from "../../lib/pseo";
+
+const path = "/compare/";
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Compare", href: path },
+];
+
+const itemList = {
+  "@type": "ItemList",
+  itemListElement: comparisons.map((c, n) => ({
+    "@type": "ListItem",
+    position: n + 1,
+    name: `${c.optionA} vs ${c.optionB}`,
+    url: absUrl(`/compare/${c.slug}/`),
+  })),
+};
+---
+
+<PseoShell
+  title="Web Build Comparisons | Flowdira"
+  description="Honest, first-hand comparisons to help you choose how to build — Astro vs Next.js, custom vs WordPress/Wix/Webflow, headless vs traditional CMS, and more."
+  canonical={absUrl(path)}
+  eyebrow="Compare"
+  h1="Choosing how to build, made clear"
+  lede="Straight comparisons from a studio that ships on these tools daily — so you can pick the right path with confidence, not marketing spin."
+  crumbs={crumbs}
+  schema={[itemList]}
+>
+  <div class="pseo-hub__grid">
+    {
+      comparisons.map((c) => (
+        <a class="pseo-hub__card" href={`/compare/${c.slug}/`}>
+          <h2>
+            {c.optionA} <span class="serif-italic">vs</span> {c.optionB}
+          </h2>
+          <p>{c.lede}</p>
+          <span class="pseo-hub__more">Read the comparison →</span>
+        </a>
+      ))
+    }
+  </div>
+</PseoShell>

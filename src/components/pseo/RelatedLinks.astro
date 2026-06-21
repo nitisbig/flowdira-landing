@@ -1,0 +1,37 @@
+---
+/* Cross-link grid — the internal-linking backbone of the pSEO network.
+   Every spoke surfaces sibling pages, glossary terms and conversion
+   points so nothing is orphaned. */
+import type { RelatedLink } from "../../lib/pseo";
+
+interface Props {
+  title?: string;
+  links: RelatedLink[];
+}
+const { title = "Keep exploring", links } = Astro.props;
+---
+
+<section class="pseo-related" data-reveal>
+  <h2>{title}</h2>
+  <div class="pseo-related__grid">
+    {
+      links.map((l) => (
+        <a class="pseo-related__item" href={l.href}>
+          <span class="pseo-related__label">
+            {l.label}
+            <svg viewBox="0 0 16 16" fill="none" width="12" height="12">
+              <path
+                d="M4 12L12 4M12 4H6M12 4V10"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          {l.note && <span class="pseo-related__note">{l.note}</span>}
+        </a>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,69 @@
+---
+/* Shared chrome for every programmatic SEO page: <head> meta (via
+   Layout), header, breadcrumb, hero, body slot, CTA band and footer.
+   Emits BreadcrumbList + any page-specific schema as JSON-LD in-body
+   (valid for Google and keeps Layout's head graph untouched). */
+import Layout from "../../layouts/Layout.astro";
+import Header from "../Header.astro";
+import Footer from "../Footer.astro";
+import Breadcrumbs from "./Breadcrumbs.astro";
+import PseoCta from "./PseoCta.astro";
+import { breadcrumbSchema, graph, type Crumb } from "../../lib/pseo";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  eyebrow?: string;
+  h1: string;
+  lede?: string;
+  crumbs: Crumb[];
+  /** Page-specific schema nodes (Service, DefinedTerm, FAQPage…). */
+  schema?: object[];
+  ctaHeading?: string;
+  ctaText?: string;
+  showCta?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  eyebrow,
+  h1,
+  lede,
+  crumbs,
+  schema = [],
+  ctaHeading,
+  ctaText,
+  showCta = true,
+} = Astro.props;
+
+const jsonLd = graph(breadcrumbSchema(crumbs), ...schema);
+---
+
+<Layout title={title} description={description} canonical={canonical}>
+  <Header />
+  <main id="main" class="pseo">
+    <div class="container">
+      <Breadcrumbs crumbs={crumbs} />
+
+      <header class="pseo-hero" data-reveal>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {Astro.slots.has("h1") ? <slot name="h1" /> : <h1>{h1}</h1>}
+        {
+          Astro.slots.has("lede")
+            ? <div class="pseo-lede"><slot name="lede" /></div>
+            : lede && <p class="pseo-lede">{lede}</p>
+        }
+      </header>
+
+      <slot />
+
+      {showCta && <PseoCta heading={ctaHeading} text={ctaText} />}
+    </div>
+  </main>
+  <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>

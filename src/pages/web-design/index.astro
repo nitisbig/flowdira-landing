@@ -1,0 +1,44 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import { regions } from "../../data/regions";
+import { absUrl } from "../../lib/pseo";
+
+const path = "/web-design/";
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Regions", href: path },
+];
+
+const itemList = {
+  "@type": "ItemList",
+  itemListElement: regions.map((r, n) => ({
+    "@type": "ListItem",
+    position: n + 1,
+    name: `Web design & development for ${r.name}`,
+    url: absUrl(`/web-design/${r.slug}/`),
+  })),
+};
+---
+
+<PseoShell
+  title="Where We Work — US, Europe & Australia | Flowdira"
+  description="Flowdira is a remote web design, development and AI studio serving businesses across the US, Europe and Australia — with timezone-friendly, compliant delivery."
+  canonical={absUrl(path)}
+  eyebrow="Where we work"
+  h1="A remote studio, close to your market"
+  lede="We work with businesses across the US, Europe and Australia — building fast, compliant, locally-relevant sites with collaboration that fits your timezone."
+  crumbs={crumbs}
+  schema={[itemList]}
+>
+  <div class="pseo-hub__grid">
+    {
+      regions.map((r) => (
+        <a class="pseo-hub__card" href={`/web-design/${r.slug}/`}>
+          <h2>{r.name}</h2>
+          <p>{r.lede}</p>
+          <span class="pseo-hub__more">For {r.adjective} businesses →</span>
+        </a>
+      ))
+    }
+  </div>
+</PseoShell>

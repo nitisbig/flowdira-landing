@@ -1,0 +1,98 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import RelatedLinks from "../../components/pseo/RelatedLinks.astro";
+import { regions, getRegion } from "../../data/regions";
+import { absUrl, faqSchema, SITE, type RelatedLink } from "../../lib/pseo";
+
+export function getStaticPaths() {
+  return regions.map((r) => ({ params: { region: r.slug } }));
+}
+
+const { region } = Astro.params;
+const data = getRegion(region!)!;
+const path = `/web-design/${data.slug}/`;
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Regions", href: "/web-design/" },
+  { label: data.name, href: path },
+];
+
+const serviceSchema = {
+  "@type": "Service",
+  name: `Web design & development for ${data.name}`,
+  serviceType: "Web design, development & AI integration",
+  description: data.description,
+  provider: { "@id": `${SITE}/#org` },
+  areaServed: { "@type": "Place", name: data.name },
+  url: absUrl(path),
+};
+
+const others = regions.filter((r) => r.slug !== data.slug);
+const related: RelatedLink[] = [
+  ...others.map((r) => ({
+    label: `Web studio for ${r.name}`,
+    href: `/web-design/${r.slug}/`,
+    note: `${r.adjective} businesses`,
+  })),
+  {
+    label: "Website design by industry",
+    href: "/web-design-for/",
+    note: "Built for your sector",
+  },
+  {
+    label: "Agency vs freelancer",
+    href: "/compare/agency-vs-freelancer/",
+    note: "Who should build your site?",
+  },
+  {
+    label: "What are Core Web Vitals?",
+    href: "/glossary/core-web-vitals/",
+    note: "The speed metrics Google ranks",
+  },
+];
+---
+
+<PseoShell
+  title={data.title}
+  description={data.description}
+  canonical={absUrl(path)}
+  eyebrow="Where we work"
+  h1={`${data.h1Lead} ${data.h1Accent}`}
+  lede={data.lede}
+  crumbs={crumbs}
+  schema={[serviceSchema, faqSchema(data.faqs)]}
+  ctaHeading={`Building something for the ${data.adjective} market?`}
+>
+  <h1 slot="h1">{data.h1Lead} <span class="serif-italic">{data.h1Accent}</span></h1>
+
+  <div class="pseo-prose" data-reveal>
+    {data.intro.map((p) => <p>{p}</p>)}
+
+    <h2>How we deliver for {data.adjective} clients</h2>
+    <div class="pseo-cards cols-2">
+      {
+        data.facts.map((f) => (
+          <div class="pseo-card">
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2>Working with Flowdira in {data.name}</h2>
+    <div class="pseo-faq">
+      {
+        data.faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="pseo-faq__a">{f.a}</div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+
+  <RelatedLinks links={related} />
+</PseoShell>

@@ -1,0 +1,60 @@
+---
+import PseoShell from "../../components/pseo/PseoShell.astro";
+import { terms } from "../../data/glossary";
+import { absUrl } from "../../lib/pseo";
+
+const path = "/glossary/";
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Glossary", href: path },
+];
+
+const groups = [
+  { key: "AI" as const, label: "AI & automation" },
+  { key: "Web" as const, label: "Web & performance" },
+];
+
+const definedTermSet = {
+  "@type": "DefinedTermSet",
+  name: "Flowdira Glossary",
+  url: absUrl(path),
+  hasDefinedTerm: terms.map((t) => ({
+    "@type": "DefinedTerm",
+    name: t.term,
+    description: t.definition,
+    url: absUrl(`/glossary/${t.slug}/`),
+  })),
+};
+---
+
+<PseoShell
+  title="Web & AI Glossary | Flowdira"
+  description="Plain-English definitions of the web and AI terms that matter — RAG, AI agents, headless CMS, Core Web Vitals, Jamstack, structured data and more."
+  canonical={absUrl(path)}
+  eyebrow="Glossary"
+  h1="Web & AI, in plain English"
+  lede="No jargon for its own sake. Clear definitions of the terms behind modern websites and AI features — framed by the studio that builds them."
+  crumbs={crumbs}
+  schema={[definedTermSet]}
+>
+  {
+    groups.map((g) => (
+      <section style="margin-top: clamp(2rem, 4vw, 3rem);">
+        <h2 class="display" style="font-size: clamp(1.4rem, 3vw, 1.9rem);">
+          {g.label}
+        </h2>
+        <div class="pseo-hub__grid">
+          {terms
+            .filter((t) => t.category === g.key)
+            .map((t) => (
+              <a class="pseo-hub__card" href={`/glossary/${t.slug}/`}>
+                <h3>{t.h1}</h3>
+                <p>{t.definition}</p>
+                <span class="pseo-hub__more">Read more →</span>
+              </a>
+            ))}
+        </div>
+      </section>
+    ))
+  }
+</PseoShell>
