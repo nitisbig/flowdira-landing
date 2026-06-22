@@ -4,6 +4,7 @@ import "@fontsource-variable/fraunces";
 import "@fontsource-variable/hanken-grotesk";
 import "lenis/dist/lenis.css";
 import "../styles/global.css";
+import ChatWidget from "../components/ChatWidget.astro";
 
 export interface Props {
   title?: string;
@@ -146,6 +147,7 @@ const jsonLd = {
     <a href="#main" class="sr-only">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
     <slot />
+    <ChatWidget />
 
     <script>
       import Lenis from "lenis";

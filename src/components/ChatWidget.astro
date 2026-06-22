@@ -1,0 +1,614 @@
+---
+/* Flowdira chat concierge — floating launcher + streaming chat panel.
+   Talks to the standalone Worker backend (see backend/) which proxies a
+   provider-agnostic, OpenAI-compatible LLM and streams clean
+   `data:{"delta":…}` SSE frames. The Worker URL is injected at build time. */
+const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
+---
+
+<aside class="fdc" data-fdc data-api={apiUrl} aria-live="off">
+  <!-- Panel -->
+  <div
+    class="fdc__panel"
+    data-fdc-panel
+    role="dialog"
+    aria-label="Chat with Flowdira"
+    aria-modal="false"
+    hidden
+  >
+    <header class="fdc__head">
+      <span class="fdc__avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path
+            d="M12 3v3m0 12v3M3 12h3m12 0h3M6 6l2 2m8 8 2 2M6 18l2-2m8-8 2-2"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"></path>
+          <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6"
+          ></circle>
+        </svg>
+      </span>
+      <div class="fdc__head-text">
+        <p class="fdc__title">Flowdira concierge</p>
+        <p class="fdc__status">Ask about design, dev &amp; AI</p>
+      </div>
+      <button class="fdc__close" type="button" data-fdc-close aria-label="Close chat">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="fdc__msgs" data-fdc-msgs data-lenis-prevent role="log" aria-live="polite">
+      <div class="fdc__msg fdc__msg--bot">
+        <div class="fdc__bubble">
+          Hi! I'm the Flowdira concierge. Ask me about our website design,
+          development or AI work — or what a project might look like.
+        </div>
+      </div>
+    </div>
+
+    <form class="fdc__composer" data-fdc-form>
+      <textarea
+        class="fdc__input"
+        data-fdc-input
+        rows="1"
+        placeholder="Ask a question…"
+        aria-label="Type your message"
+        autocomplete="off"
+      ></textarea>
+      <button class="fdc__send" type="submit" data-fdc-send aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <path d="M4 12l16-8-6 16-3-7-7-1z" stroke="currentColor" stroke-width="1.6"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </form>
+
+    <p class="fdc__footer">Powered by Flowdira AI</p>
+  </div>
+
+  <!-- Launcher -->
+  <button
+    class="fdc__launch"
+    type="button"
+    data-fdc-launch
+    aria-label="Open chat"
+    aria-expanded="false"
+  >
+    <span class="fdc__launch-icon fdc__launch-icon--open">
+      <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+        <path
+          d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1-.9-3.8A8.38 8.38 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </span>
+    <span class="fdc__launch-icon fdc__launch-icon--close" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"></path>
+      </svg>
+    </span>
+  </button>
+</aside>
+
+<style>
+  .fdc {
+    position: fixed;
+    right: clamp(1rem, 3vw, 1.75rem);
+    bottom: clamp(1rem, 3vw, 1.75rem);
+    z-index: 1000;
+    font-family: var(--font-sans);
+  }
+
+  /* ---- Launcher ---- */
+  .fdc__launch {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-left: auto;
+    border-radius: var(--r-pill);
+    border: none;
+    color: #fff;
+    background: var(--blue-grad);
+    box-shadow: var(--blue-glow);
+    cursor: pointer;
+    transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease);
+  }
+  .fdc__launch:hover {
+    transform: translateY(-2px) scale(1.04);
+  }
+  .fdc__launch:focus-visible {
+    outline: 2px solid var(--blue-ink);
+    outline-offset: 3px;
+  }
+  .fdc__launch-icon {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
+    transition: opacity 0.25s var(--ease), transform 0.35s var(--ease-spring);
+  }
+  .fdc__launch-icon--close {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0.6);
+  }
+  .fdc.is-open .fdc__launch-icon--open {
+    opacity: 0;
+    transform: rotate(45deg) scale(0.6);
+  }
+  .fdc.is-open .fdc__launch-icon--close {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+
+  /* ---- Panel ---- */
+  .fdc__panel {
+    position: absolute;
+    right: 0;
+    bottom: 4.5rem;
+    display: flex;
+    flex-direction: column;
+    width: min(23rem, calc(100vw - 2rem));
+    height: min(31rem, calc(100vh - 7rem));
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-deep);
+    overflow: hidden;
+    transform-origin: bottom right;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px) scale(0.96);
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+  }
+  /* Truly remove from layout + a11y tree when closed. Must override the
+     `display: flex` above, which otherwise defeats the `hidden` attribute. */
+  .fdc__panel[hidden] {
+    display: none;
+  }
+  .fdc.is-open .fdc__panel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  /* ---- Header ---- */
+  .fdc__head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1rem;
+    background:
+      radial-gradient(120% 120% at 90% 0%, rgba(22, 160, 250, 0.22), transparent 60%),
+      var(--forest);
+    color: var(--on-forest);
+  }
+  .fdc__avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    border-radius: var(--r-pill);
+    background: rgba(22, 160, 250, 0.16);
+    color: var(--blue-bright);
+  }
+  .fdc__head-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .fdc__title {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .fdc__status {
+    font-size: 0.74rem;
+    color: var(--on-forest-mut);
+    margin-top: 1px;
+  }
+  .fdc__close {
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border: none;
+    border-radius: var(--r-pill);
+    background: rgba(237, 231, 216, 0.12);
+    color: var(--on-forest);
+    cursor: pointer;
+    transition: background 0.25s var(--ease);
+  }
+  .fdc__close:hover {
+    background: rgba(237, 231, 216, 0.22);
+  }
+  .fdc__close:focus-visible {
+    outline: 2px solid var(--blue-bright);
+    outline-offset: 2px;
+  }
+
+  /* ---- Messages ---- */
+  .fdc__msgs {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    scroll-behavior: smooth;
+  }
+  .fdc__msg {
+    display: flex;
+    max-width: 85%;
+  }
+  .fdc__msg--bot {
+    align-self: flex-start;
+  }
+  .fdc__msg--user {
+    align-self: flex-end;
+  }
+  .fdc__bubble {
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--r-md);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .fdc__msg--bot .fdc__bubble {
+    background: var(--paper-sunk);
+    color: var(--ink-2);
+    border-bottom-left-radius: var(--r-xs);
+  }
+  .fdc__msg--user .fdc__bubble {
+    background: var(--forest);
+    color: var(--on-forest);
+    border-bottom-right-radius: var(--r-xs);
+  }
+  .fdc__bubble a {
+    color: var(--blue-deep);
+    text-decoration: underline;
+  }
+  .fdc__msg--user .fdc__bubble a {
+    color: #fff;
+  }
+  .fdc__bubble strong {
+    font-weight: 600;
+  }
+  .fdc__bubble--error {
+    background: rgba(181, 103, 63, 0.12);
+    color: var(--clay);
+  }
+
+  /* typing dots */
+  .fdc__dots {
+    display: inline-flex;
+    gap: 3px;
+  }
+  .fdc__dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--muted-2);
+    animation: fdc-bounce 1.2s var(--ease) infinite;
+  }
+  .fdc__dots span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .fdc__dots span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  @keyframes fdc-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* ---- Composer ---- */
+  .fdc__composer {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    border-top: 1px solid var(--hairline);
+    background: var(--paper-raised);
+  }
+  .fdc__input {
+    flex: 1;
+    resize: none;
+    max-height: 6rem;
+    padding: 0.55rem 0.7rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    transition: border-color 0.25s var(--ease);
+  }
+  .fdc__input:focus {
+    outline: none;
+    border-color: var(--blue-line);
+  }
+  .fdc__send {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex-shrink: 0;
+    border: none;
+    border-radius: var(--r-sm);
+    color: #fff;
+    background: var(--blue-grad);
+    cursor: pointer;
+    transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+  }
+  .fdc__send:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .fdc__send:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .fdc__send:focus-visible {
+    outline: 2px solid var(--blue-ink);
+    outline-offset: 2px;
+  }
+
+  .fdc__footer {
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--muted-2);
+    padding-bottom: 0.55rem;
+  }
+
+  /* ---- Mobile: full-height sheet ---- */
+  @media (max-width: 540px) {
+    .fdc__panel {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      bottom: 0;
+    }
+  }
+
+  /* ---- Reduced motion ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .fdc__launch,
+    .fdc__launch-icon,
+    .fdc__panel,
+    .fdc__send {
+      transition: none;
+    }
+    .fdc__dots span {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  type Role = "user" | "assistant";
+  interface Msg { role: Role; content: string; }
+
+  const MAX_HISTORY = 10;
+  const STORE_KEY = "fdc:history";
+
+  const root = document.querySelector<HTMLElement>("[data-fdc]");
+  if (root) {
+    const api = (root.dataset.api ?? "").replace(/\/+$/, "");
+    const panel = root.querySelector<HTMLElement>("[data-fdc-panel]")!;
+    const launch = root.querySelector<HTMLButtonElement>("[data-fdc-launch]")!;
+    const closeBtn = root.querySelector<HTMLButtonElement>("[data-fdc-close]")!;
+    const msgs = root.querySelector<HTMLElement>("[data-fdc-msgs]")!;
+    const form = root.querySelector<HTMLFormElement>("[data-fdc-form]")!;
+    const input = root.querySelector<HTMLTextAreaElement>("[data-fdc-input]")!;
+    const sendBtn = root.querySelector<HTMLButtonElement>("[data-fdc-send]")!;
+
+    let history: Msg[] = loadHistory();
+    let streaming = false;
+
+    // ---- persistence ----
+    function loadHistory(): Msg[] {
+      try {
+        const raw = sessionStorage.getItem(STORE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    function saveHistory() {
+      try {
+        sessionStorage.setItem(STORE_KEY, JSON.stringify(history.slice(-MAX_HISTORY)));
+      } catch {
+        /* storage may be unavailable; ignore */
+      }
+    }
+
+    // ---- rendering ----
+    function escapeHtml(s: string): string {
+      return s.replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+      );
+    }
+    function formatHtml(text: string): string {
+      let h = escapeHtml(text);
+      h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      h = h.replace(
+        /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+        '<a href="mailto:$1">$1</a>',
+      );
+      h = h.replace(
+        /\b(https?:\/\/[^\s<]+)/g,
+        '<a href="$1" target="_blank" rel="noopener">$1</a>',
+      );
+      return h.replace(/\n/g, "<br>");
+    }
+
+    function addBubble(role: Role | "error"): HTMLElement {
+      const wrap = document.createElement("div");
+      wrap.className = `fdc__msg fdc__msg--${role === "user" ? "user" : "bot"}`;
+      const bubble = document.createElement("div");
+      bubble.className = "fdc__bubble" + (role === "error" ? " fdc__bubble--error" : "");
+      wrap.appendChild(bubble);
+      msgs.appendChild(wrap);
+      scrollToEnd();
+      return bubble;
+    }
+    function scrollToEnd() {
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+    function renderHistory() {
+      // Keep the seeded greeting (first child); append stored turns after it.
+      for (const m of history) {
+        const bubble = addBubble(m.role);
+        bubble.innerHTML = formatHtml(m.content);
+      }
+    }
+
+    // ---- open / close ----
+    function openPanel() {
+      panel.hidden = false;
+      // next frame so the transition runs from the hidden state
+      requestAnimationFrame(() => root!.classList.add("is-open"));
+      launch.setAttribute("aria-expanded", "true");
+      launch.setAttribute("aria-label", "Close chat");
+      setTimeout(() => input.focus(), 60);
+    }
+    function closePanel() {
+      root!.classList.remove("is-open");
+      launch.setAttribute("aria-expanded", "false");
+      launch.setAttribute("aria-label", "Open chat");
+      launch.focus();
+      const onEnd = () => { panel.hidden = true; panel.removeEventListener("transitionend", onEnd); };
+      // Respect reduced motion (no transition -> hide immediately)
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) panel.hidden = true;
+      else panel.addEventListener("transitionend", onEnd);
+    }
+    function toggle() {
+      root!.classList.contains("is-open") ? closePanel() : openPanel();
+    }
+
+    launch.addEventListener("click", toggle);
+    closeBtn.addEventListener("click", closePanel);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && root!.classList.contains("is-open")) closePanel();
+    });
+
+    // ---- input ergonomics ----
+    input.addEventListener("input", () => {
+      input.style.height = "auto";
+      input.style.height = Math.min(input.scrollHeight, 96) + "px";
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    // ---- send + stream ----
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text || streaming) return;
+      if (!api) {
+        const b = addBubble("error");
+        b.textContent = "Chat isn't configured yet. Please email contact@flowdira.com.";
+        return;
+      }
+
+      // user message
+      history.push({ role: "user", content: text });
+      const userBubble = addBubble("user");
+      userBubble.textContent = text;
+      input.value = "";
+      input.style.height = "auto";
+      saveHistory();
+
+      // assistant placeholder with typing dots
+      streaming = true;
+      sendBtn.disabled = true;
+      const botBubble = addBubble("assistant");
+      botBubble.innerHTML =
+        '<span class="fdc__dots"><span></span><span></span><span></span></span>';
+
+      let acc = "";
+      try {
+        const res = await fetch(api, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: history.slice(-MAX_HISTORY) }),
+        });
+
+        if (!res.ok || !res.body) {
+          const data = await res.json().catch(() => ({}) as { message?: string });
+          botBubble.classList.add("fdc__bubble--error");
+          botBubble.textContent =
+            data.message ?? "Something went wrong. Please email contact@flowdira.com.";
+          return;
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let firstToken = true;
+
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() ?? "";
+          for (const part of parts) {
+            const line = part.trim();
+            if (!line.startsWith("data:")) continue;
+            const payload = line.slice(5).trim();
+            if (payload === "[DONE]") continue;
+            try {
+              const { delta } = JSON.parse(payload) as { delta?: string };
+              if (typeof delta === "string") {
+                if (firstToken) { botBubble.textContent = ""; firstToken = false; }
+                acc += delta;
+                botBubble.textContent = acc;
+                scrollToEnd();
+              }
+            } catch {
+              /* ignore malformed frame */
+            }
+          }
+        }
+
+        if (acc) {
+          botBubble.innerHTML = formatHtml(acc);
+          history.push({ role: "assistant", content: acc });
+          saveHistory();
+        } else {
+          botBubble.classList.add("fdc__bubble--error");
+          botBubble.textContent =
+            "Sorry, I didn't catch that. Please try again or email contact@flowdira.com.";
+        }
+      } catch {
+        botBubble.classList.add("fdc__bubble--error");
+        botBubble.textContent =
+          "Connection lost. Please try again or email contact@flowdira.com.";
+      } finally {
+        streaming = false;
+        sendBtn.disabled = false;
+        scrollToEnd();
+      }
+    });
+
+    // hydrate prior conversation (if any) on load
+    renderHistory();
+  }
+</script>
