@@ -74,8 +74,13 @@ const projects = [
 ];
 
 const platformLabel = { vercel: "Vercel", cloudflare: "Cloudflare" };
-// bento rhythm — these indices render as full-width feature cards
-const featureIndices = new Set([0, 3, 6]);
+
+// Split the editorial "category · role" line into its two parts so each entry
+// reads like a catalogue listing — no invented copy, derived from real data.
+const entries = projects.map((p, i) => {
+  const [descriptor, role] = p.cat.split(" · ");
+  return { ...p, descriptor, role: role ?? "", n: String(i + 1).padStart(2, "0") };
+});
 ---
 
 <section class="work section" id="work">
@@ -84,152 +89,162 @@ const featureIndices = new Set([0, 3, 6]);
       <div data-reveal="left">
         <p class="eyebrow">Selected work</p>
         <h2 class="work__title">
-          Designed, built &amp; <span class="serif-italic">deployed.</span>
+          Shipped, not <span class="serif-italic">mocked up.</span>
         </h2>
       </div>
 
-      <!-- GitHub → build → live pipeline -->
-      <div class="pipeline" data-reveal="right">
-        <span class="pipeline__node">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-            <path
-              d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z"
-            ></path>
-          </svg>
-          Push
-        </span>
-        <span class="pipeline__line"></span>
-        <span class="pipeline__node">
-          <span class="pipeline__build"></span>
-          Build
-        </span>
-        <span class="pipeline__line"></span>
-        <span class="pipeline__node pipeline__node--live">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
-            <path d="M12 3 22 20H2L12 3Z"></path>
-          </svg>
-          Live in production
+      <div class="work__aside" data-reveal="right">
+        <p class="work__lede">
+          Every piece below is live in production this minute — real code
+          pushed to Git, built, and deployed. Step inside any of them.
+        </p>
+
+        <!-- push → build → live, the studio's actual pipeline -->
+        <span class="pipeline" role="img" aria-label="Workflow: push to Git, build, live in production">
+          <span class="pipeline__node">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path
+                d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z"
+              ></path>
+            </svg>
+            Push
+          </span>
+          <span class="pipeline__line"></span>
+          <span class="pipeline__node">
+            <span class="pipeline__build" aria-hidden="true"></span>
+            Build
+          </span>
+          <span class="pipeline__line"></span>
+          <span class="pipeline__node pipeline__node--live">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12" aria-hidden="true">
+              <path d="M12 3 22 20H2L12 3Z"></path>
+            </svg>
+            Live
+          </span>
         </span>
       </div>
     </header>
 
-    <div class="work__grid">
+    <ol class="reel">
       {
-        projects.map((p, i) => (
-          <article
-            class:list={["proj", { "proj--feature": featureIndices.has(i) }]}
+        entries.map((p, i) => (
+          <li
+            class:list={["entry", { "entry--flip": i % 2 === 1 }]}
             data-reveal="scale"
-            data-tilt
-            style={`--reveal-delay: ${(i % 2) * 90}ms`}
           >
-            <div class="proj__inner">
-              <span class="proj__spot" aria-hidden="true" />
+            <span class="entry__ghost" data-parallax aria-hidden="true">
+              {p.n}
+            </span>
 
-              <a
-                class="proj__preview"
-                href={p.url}
-                target="_blank"
-                rel="noopener"
-                aria-label={`Open ${p.title} live`}
-              >
-                <div class="proj__chrome">
-                  <span class="proj__dots">
-                    <i /><i /><i />
-                  </span>
-                  <span class="proj__addr">{p.host}</span>
-                </div>
+            <a
+              class="frame"
+              href={p.url}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Open ${p.title} live in a new tab`}
+            >
+              <span class="frame__spot" aria-hidden="true" />
 
-                <div class="proj__shot-wrap">
-                  <img
-                    class="proj__shot"
-                    src={p.img}
-                    alt={`${p.title} — live site preview`}
-                    width="1280"
-                    height="800"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-
-                <span class:list={["proj__deploy", `proj__deploy--${p.platform}`]}>
-                  {p.platform === "cloudflare" ? (
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-                      <path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 3.5 3.5 0 0 0 7 18Z" />
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10">
-                      <path d="M12 3 22 20H2L12 3Z" />
-                    </svg>
-                  )}
+              <span class="frame__chrome">
+                <span class="frame__dots" aria-hidden="true">
+                  <i /><i /><i />
+                </span>
+                <span class="frame__addr">{p.host}</span>
+                <span class="frame__live">
+                  <span class="frame__pulse" aria-hidden="true" />
                   Live
                 </span>
-              </a>
+              </span>
 
-              <div class="proj__meta">
-                <div class="proj__line">
-                  <h3 class="proj__name">{p.title}</h3>
-                  <a
-                    class="proj__visit"
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label={`Visit ${p.title}`}
-                  >
-                    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                      <path
-                        d="M4 12L12 4M12 4H6M12 4V10"
-                        stroke="currentColor"
-                        stroke-width="1.7"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </a>
-                </div>
-                <p class="proj__cat">{p.cat}</p>
+              <span class="frame__shot">
+                <img
+                  src={p.img}
+                  alt={`${p.title} — live site preview`}
+                  width="1280"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+
+              <span class="frame__cue" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" width="18" height="18">
+                  <path
+                    d="M4 12L12 4M12 4H6M12 4V10"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </a>
+
+            <div class="entry__meta">
+              <p class="entry__role">
+                <span class="entry__index">{p.n}</span>
+                {p.role}
+              </p>
+
+              <h3 class="entry__name">{p.title}</h3>
+              <p class="entry__desc">{p.descriptor}</p>
+
+              <ul class="entry__tags">
+                {p.tags.map((t) => (
+                  <li class="tag">{t}</li>
+                ))}
+              </ul>
+
+              <div class="entry__foot">
+                <a
+                  class="entry__visit link-underline"
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`Visit ${p.title} live site`}
+                >
+                  View live site
+                  <svg viewBox="0 0 16 16" fill="none" width="13" height="13" aria-hidden="true">
+                    <path
+                      d="M4 12L12 4M12 4H6M12 4V10"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
 
                 {p.repo && (
                   <a
-                    class="proj__repo"
+                    class="entry__repo"
                     href={`https://github.com/${p.repo}`}
                     target="_blank"
                     rel="noopener"
+                    aria-label={`View ${p.title} source on GitHub`}
                   >
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" aria-hidden="true">
                       <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z" />
                     </svg>
-                    <span class="proj__repo-name">{p.repo}</span>
+                    <span class="entry__repo-name">{p.repo}</span>
                   </a>
                 )}
 
-                <div class="proj__foot">
-                  <div class="proj__tags">
-                    {p.tags.map((t) => (
-                      <span class="tag">{t}</span>
-                    ))}
-                  </div>
-                  <span
-                    class:list={["proj__plat", `proj__plat--${p.platform}`]}
-                    title={`Deployed on ${platformLabel[p.platform]}`}
-                  >
-                    {p.platform === "cloudflare" ? (
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-                        <path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6 9.5 3.5 3.5 0 0 0 7 18Z" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11">
-                        <path d="M12 3 22 20H2L12 3Z" />
-                      </svg>
-                    )}
-                    {platformLabel[p.platform]}
-                  </span>
-                </div>
+                <span
+                  class:list={["entry__plat", `entry__plat--${p.platform}`]}
+                  title={`Deployed on ${platformLabel[p.platform]}`}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11" aria-hidden="true">
+                    <path d="M12 3 22 20H2L12 3Z" />
+                  </svg>
+                  {platformLabel[p.platform]}
+                </span>
               </div>
             </div>
-          </article>
+          </li>
         ))
       }
-    </div>
+    </ol>
 
     <div class="work__cta" data-reveal>
       <a
@@ -255,29 +270,46 @@ const featureIndices = new Set([0, 3, 6]);
 </section>
 
 <style>
-  .work__head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  /* contain the bleeding ghost numerals without a horizontal scrollbar */
+  .work {
+    overflow-x: clip;
   }
 
+  /* ---------- header ---------- */
+  .work__head {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem clamp(2rem, 5vw, 4rem);
+    align-items: end;
+    margin-bottom: clamp(3rem, 7vw, 5.5rem);
+  }
   .work__title {
-    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
     margin-top: 1rem;
   }
   .work__title .serif-italic {
     color: var(--blue);
   }
-
-  /* pipeline */
-  .pipeline {
+  .work__aside {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.4rem;
+    padding-bottom: 0.4rem;
+  }
+  .work__lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 32rem;
+  }
+
+  /* ---------- push → build → live chip ---------- */
+  .pipeline {
+    display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    padding: 0.65rem 0.95rem;
+    padding: 0.6rem 0.95rem;
     background: var(--paper-raised);
     border: 1px solid var(--hairline);
     border-radius: var(--r-pill);
@@ -287,16 +319,16 @@ const featureIndices = new Set([0, 3, 6]);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.82rem;
-    font-weight: 540;
+    font-size: 0.8rem;
+    font-weight: 560;
     color: var(--ink-2);
   }
   .pipeline__node--live {
     color: var(--blue);
-    font-weight: 600;
+    font-weight: 640;
   }
   .pipeline__line {
-    width: 1.5rem;
+    width: 1.4rem;
     height: 1px;
     background: var(--line-strong);
     position: relative;
@@ -319,8 +351,8 @@ const featureIndices = new Set([0, 3, 6]);
     }
   }
   .pipeline__build {
-    width: 0.75rem;
-    height: 0.75rem;
+    width: 0.7rem;
+    height: 0.7rem;
     border-radius: 50%;
     border: 2px solid var(--blue);
     border-top-color: transparent;
@@ -332,52 +364,74 @@ const featureIndices = new Set([0, 3, 6]);
     }
   }
 
-  /* grid */
-  .work__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+  /* ---------- the reel ---------- */
+  .reel {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4rem, 9vw, 7.5rem);
   }
 
-  .proj {
-    border-radius: var(--r-lg);
-    perspective: 1100px;
-  }
-  .proj--feature {
-    grid-column: 1 / -1;
-  }
-
-  /* tilt + lift target */
-  .proj__inner {
+  .entry {
     position: relative;
-    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.75rem, 4.5vw, 4rem);
+    align-items: center;
+  }
+
+  /* alternating composition — even rows mirror */
+  .entry--flip .frame {
+    order: 2;
+  }
+  .entry--flip .entry__meta {
+    order: 1;
+  }
+
+  /* giant catalogue numeral bleeding behind the listing */
+  .entry__ghost {
+    position: absolute;
+    top: -0.46em;
+    right: -0.06em;
+    z-index: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(7rem, 15vw, 14rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: var(--forest);
+    opacity: 0.05;
+    pointer-events: none;
+    user-select: none;
+  }
+  .entry--flip .entry__ghost {
+    right: auto;
+    left: -0.06em;
+  }
+
+  /* ---------- live browser frame ---------- */
+  .frame {
+    position: relative;
+    display: block;
+    z-index: 1;
     border-radius: var(--r-lg);
     background: var(--paper-raised);
     border: 1px solid var(--hairline);
     box-shadow: var(--shadow-card);
     overflow: hidden;
-    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-    transform-style: preserve-3d;
-    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease),
-      border-color 0.5s var(--ease);
+    transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease),
+      border-color 0.6s var(--ease);
   }
-  .proj:hover .proj__inner {
+  .frame:hover {
+    transform: translateY(-6px);
     box-shadow: var(--shadow-float), var(--blue-glow);
     border-color: var(--blue-line);
   }
 
-  /* feature cards lay preview + meta side by side */
-  .proj--feature .proj__inner {
-    display: grid;
-    grid-template-columns: 1.08fr 0.92fr;
-    align-items: stretch;
-  }
-
-  /* pointer-tracking spotlight */
-  .proj__spot {
+  /* pointer-tracking spotlight (JS-fed; harmless without it) */
+  .frame__spot {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 3;
     pointer-events: none;
     opacity: 0;
     background: radial-gradient(
@@ -387,263 +441,267 @@ const featureIndices = new Set([0, 3, 6]);
     );
     transition: opacity 0.4s var(--ease);
   }
-  .proj:hover .proj__spot {
+  .frame:hover .frame__spot {
     opacity: 1;
   }
 
-  .proj__preview {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin: 0.6rem 0.6rem 0;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    aspect-ratio: 16 / 10;
-    background: var(--paper-sunk);
-    border: 1px solid var(--hairline);
-    cursor: pointer;
-  }
-  .proj--feature .proj__preview {
-    aspect-ratio: auto;
-    margin: 0.7rem 0 0.7rem 0.7rem;
-    min-height: 17rem;
-  }
-
-  .proj__chrome {
+  .frame__chrome {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.5rem 0.7rem;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
     background: color-mix(in srgb, var(--ink) 5%, transparent);
+    border-bottom: 1px solid var(--hairline);
   }
-  .proj__dots {
+  .frame__dots {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.28rem;
+    flex-shrink: 0;
   }
-  .proj__dots i {
-    width: 0.4rem;
-    height: 0.4rem;
+  .frame__dots i {
+    width: 0.42rem;
+    height: 0.42rem;
     border-radius: 50%;
     background: var(--line-strong);
   }
-  .proj__addr {
-    font-size: 0.62rem;
+  .frame__addr {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.66rem;
     color: var(--muted);
     letter-spacing: -0.01em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  /* real screenshot fills the viewport area below the chrome */
-  .proj__shot-wrap {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
+  .frame__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    font-size: 0.64rem;
+    font-weight: 640;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--blue);
   }
-  .proj__shot {
+  .frame__pulse {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--blue);
+    animation: pulse 2.4s var(--ease) infinite;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(10, 114, 247, 0.5);
+    }
+    70% {
+      box-shadow: 0 0 0 0.5rem rgba(10, 114, 247, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(10, 114, 247, 0);
+    }
+  }
+
+  .frame__shot {
     display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--paper-sunk);
+  }
+  .frame__shot img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    transition: transform 0.6s var(--ease);
+    transition: transform 0.8s var(--ease);
   }
-  .proj:hover .proj__shot {
-    transform: scale(1.035);
+  .frame:hover .frame__shot img {
+    transform: scale(1.045);
   }
 
-  .proj__deploy {
+  .frame__cue {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.62rem;
-    font-weight: 600;
-    color: #fff;
-    background: color-mix(in srgb, var(--blue-deep) 86%, transparent);
-    backdrop-filter: blur(4px);
-    padding: 0.3em 0.6em;
-    border-radius: var(--r-pill);
-  }
-  .proj__deploy--cloudflare {
-    color: #4a2e05;
-    background: color-mix(in srgb, var(--gold) 90%, transparent);
-  }
-
-  /* ---- meta ---- */
-  .proj__meta {
-    padding: 1.25rem 1.4rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-  }
-  .proj--feature .proj__meta {
-    justify-content: center;
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-  }
-  .proj__line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-  }
-  .proj__name {
-    font-size: 1.3rem;
-    letter-spacing: -0.03em;
-  }
-  .proj--feature .proj__name {
-    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
-  }
-  .proj__visit {
+    bottom: 0.85rem;
+    right: 0.85rem;
+    z-index: 4;
     display: grid;
     place-items: center;
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 2.8rem;
+    height: 2.8rem;
     border-radius: 50%;
-    border: 1px solid var(--line);
-    color: var(--ink);
-    flex-shrink: 0;
-    transition: background 0.4s var(--ease), color 0.4s var(--ease),
-      transform 0.4s var(--ease), border-color 0.4s var(--ease);
-  }
-  .proj__visit:hover {
-    background: var(--blue-grad);
-    border-color: transparent;
     color: #fff;
-    transform: rotate(45deg);
+    background: var(--blue-grad);
+    box-shadow: var(--blue-glow);
+    opacity: 0;
+    transform: translateY(10px) scale(0.85);
+    transition: opacity 0.45s var(--ease), transform 0.45s var(--ease-spring);
   }
-  .proj__cat {
-    font-size: 0.85rem;
+  .frame:hover .frame__cue {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* ---------- editorial meta ---------- */
+  .entry__meta {
+    position: relative;
+    z-index: 1;
+  }
+  .entry__role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     color: var(--muted);
-    margin-top: 0.2rem;
   }
-  .proj--feature .proj__cat {
+  .entry__index {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--blue);
+  }
+  .entry__name {
+    margin-top: 0.85rem;
+    font-size: clamp(1.8rem, 3.6vw, 2.9rem);
+    letter-spacing: -0.03em;
+  }
+  .entry__desc {
+    margin-top: 0.7rem;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 26rem;
+  }
+  .entry__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.4rem;
+  }
+
+  .entry__foot {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.85rem 1.4rem;
+    margin-top: 1.6rem;
+  }
+  .entry__visit {
     font-size: 0.95rem;
+    font-weight: 560;
+    color: var(--blue);
   }
-  .proj__repo {
+  .entry__repo {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.9rem;
-    font-size: 0.8rem;
-    font-family: var(--font-sans);
-    color: var(--ink-2);
-    background: var(--paper-sunk);
-    padding: 0.35rem 0.7rem;
-    border-radius: var(--r-pill);
-    border: 1px solid var(--hairline);
     max-width: 100%;
     min-width: 0;
-    align-self: flex-start;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    background: var(--paper-sunk);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
     transition: color 0.3s var(--ease), border-color 0.3s var(--ease),
       background 0.3s var(--ease);
   }
-  .proj__repo-name {
+  .entry__repo svg {
+    flex-shrink: 0;
+  }
+  .entry__repo-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
   }
-  .proj__repo svg {
-    flex-shrink: 0;
-  }
-  .proj__repo:hover {
+  .entry__repo:hover {
     color: var(--blue);
     border-color: var(--blue-line);
     background: var(--blue-soft);
   }
-  .proj__foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-  }
-  .proj__tags {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-  }
-  .proj__plat {
+  .entry__plat {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    margin-left: auto;
     font-size: 0.74rem;
     font-weight: 600;
     color: var(--blue);
     white-space: nowrap;
   }
-  .proj__plat--cloudflare {
+  .entry__plat--cloudflare {
     color: var(--gold-deep);
   }
 
   .work__cta {
     display: flex;
     justify-content: center;
-    margin-top: 2.75rem;
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px) {
+    .work__head {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 1.5rem;
+    }
+    .entry {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    /* stack preview-first regardless of parity */
+    .entry--flip .frame,
+    .entry--flip .entry__meta {
+      order: 0;
+    }
+    .entry__ghost {
+      top: -0.34em;
+      right: 0;
+      font-size: clamp(5.5rem, 24vw, 9rem);
+      opacity: 0.06;
+    }
+    .entry--flip .entry__ghost {
+      left: auto;
+      right: 0;
+    }
+    .entry__plat {
+      margin-left: 0;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .proj__inner {
-      transform: none !important;
+    .frame:hover {
+      transform: none;
     }
-  }
-
-  @media (max-width: 760px) {
-    .work__grid {
-      grid-template-columns: 1fr;
-    }
-    .work__head {
-      align-items: flex-start;
-    }
-    .proj--feature .proj__inner {
-      grid-template-columns: 1fr;
-    }
-    .proj--feature .proj__preview {
-      margin: 0.6rem 0.6rem 0;
-      min-height: 0;
-      aspect-ratio: 16 / 10;
+    .frame:hover .frame__shot img {
+      transform: none;
     }
   }
 </style>
 
 <script>
-  // Premium hover layer: pointer-tracking spotlight + subtle 3D tilt.
-  // Skipped entirely for touch / reduced-motion so it never gets in the way.
+  // Premium hover layer: a soft pointer-tracking spotlight on each live frame.
+  // Skipped on touch / reduced-motion so it never gets in the way.
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   if (!reduce && fine) {
-    const cards = document.querySelectorAll<HTMLElement>("[data-tilt]");
-    cards.forEach((card) => {
-      const inner = card.querySelector<HTMLElement>(".proj__inner");
-      const spot = card.querySelector<HTMLElement>(".proj__spot");
-      const MAX = 5; // degrees
-
-      const onMove = (e: PointerEvent) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
-        if (inner) {
-          inner.style.setProperty("--ry", `${(px - 0.5) * MAX * 2}deg`);
-          inner.style.setProperty("--rx", `${(0.5 - py) * MAX * 2}deg`);
-        }
-        if (spot) {
-          spot.style.setProperty("--mx", `${px * 100}%`);
-          spot.style.setProperty("--my", `${py * 100}%`);
-        }
-      };
-      const reset = () => {
-        if (!inner) return;
-        inner.style.setProperty("--rx", "0deg");
-        inner.style.setProperty("--ry", "0deg");
-      };
-
-      card.addEventListener("pointermove", onMove);
-      card.addEventListener("pointerleave", reset);
+    const frames = document.querySelectorAll<HTMLElement>(".work .frame");
+    frames.forEach((frame) => {
+      const spot = frame.querySelector<HTMLElement>(".frame__spot");
+      if (!spot) return;
+      frame.addEventListener("pointermove", (e: PointerEvent) => {
+        const r = frame.getBoundingClientRect();
+        spot.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+        spot.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+      });
     });
   }
 </script>
