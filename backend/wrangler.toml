@@ -1,0 +1,26 @@
+# Flowdira chat concierge — provider-agnostic LLM proxy Worker.
+# Deploy:  wrangler deploy   (run `wrangler secret put LLM_API_KEY` first)
+# Local:   wrangler dev      (reads .dev.vars for secrets/overrides)
+name = "flowdira-chat"
+main = "src/index.ts"
+compatibility_date = "2025-10-01"
+
+# Non-secret configuration. The LLM provider is selected entirely here +
+# the LLM_API_KEY secret — no code changes needed to swap providers.
+# Any provider speaking the OpenAI-compatible /chat/completions API works.
+[vars]
+LLM_BASE_URL = "https://api.openai.com/v1"
+LLM_MODEL = "gpt-4o-mini"
+ALLOWED_ORIGINS = "https://flowdira.com,https://www.flowdira.com,http://localhost:4321"
+MAX_TOKENS = "500"
+RATE_LIMIT_PER_MIN = "20"
+MAX_MESSAGE_CHARS = "1500"
+MAX_HISTORY = "10"
+
+# Native rate limiting (GA). `period` must be 10 or 60 (seconds).
+# `limit` here is the hard cap per period; RATE_LIMIT_PER_MIN above mirrors it
+# for code-side messaging. Keep them in sync if you change the value.
+[[ratelimits]]
+name = "CHAT_RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 20, period = 60 }

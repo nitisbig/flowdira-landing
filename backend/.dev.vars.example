@@ -1,0 +1,15 @@
+# Local dev config for `wrangler dev`. Copy this file to `.dev.vars` and fill in.
+# `.dev.vars` is gitignored — never commit real keys.
+#
+# Values here OVERRIDE wrangler.toml [vars] during local dev, so you can point
+# at any OpenAI-compatible provider (OpenAI, OpenRouter, Groq, DeepSeek, a local
+# Ollama, etc.) without touching wrangler.toml.
+#
+# In production, set the key as a secret instead:  wrangler secret put LLM_API_KEY
+
+LLM_API_KEY="sk-your-key-here"
+
+# Optional local overrides (uncomment to change provider/model locally):
+# LLM_BASE_URL="https://api.openai.com/v1"
+# LLM_MODEL="gpt-4o-mini"
+# ALLOWED_ORIGINS="http://localhost:4321"

@@ -22,6 +22,10 @@ pnpm-debug.log*
 .env.production
 .env.*.local
 
+# cloudflare worker (backend/)
+.dev.vars
+.wrangler/
+
 # os / editor
 .DS_Store
 Thumbs.db
