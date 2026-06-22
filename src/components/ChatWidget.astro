@@ -4,6 +4,14 @@
    provider-agnostic, OpenAI-compatible LLM and streams clean
    `data:{"delta":…}` SSE frames. The Worker URL is injected at build time. */
 const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
+
+/* Suggested openers — shown only in the empty state, hidden once a
+   conversation starts. Keep them short, scannable, and on-topic. */
+const prompts = [
+  "What does Flowdira do?",
+  "How much does a website cost?",
+  "Can you build AI features?",
+];
 ---
 
 <aside class="fdc" data-fdc data-api={apiUrl} aria-live="off">
@@ -18,19 +26,23 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
   >
     <header class="fdc__head">
       <span class="fdc__avatar" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
           <path
-            d="M12 3v3m0 12v3M3 12h3m12 0h3M6 6l2 2m8 8 2 2M6 18l2-2m8-8 2-2"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"></path>
-          <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6"
-          ></circle>
+            d="M12 2.5c.4 3.6 1.4 4.6 5 5-3.6.4-4.6 1.4-5 5-.4-3.6-1.4-4.6-5-5 3.6-.4 4.6-1.4 5-5Z"
+            fill="currentColor"></path>
+          <path
+            d="M18.5 14c.2 1.9.7 2.4 2.5 2.5-1.8.2-2.3.7-2.5 2.5-.2-1.8-.7-2.3-2.5-2.5 1.8-.2 2.3-.6 2.5-2.5Z"
+            fill="currentColor"
+            opacity="0.7"></path>
         </svg>
+        <span class="fdc__avatar-dot" aria-hidden="true"></span>
       </span>
       <div class="fdc__head-text">
         <p class="fdc__title">Flowdira concierge</p>
-        <p class="fdc__status">Ask about design, dev &amp; AI</p>
+        <p class="fdc__status">
+          <span class="fdc__status-dot" aria-hidden="true"></span>
+          Online · replies instantly
+        </p>
       </div>
       <button class="fdc__close" type="button" data-fdc-close aria-label="Close chat">
         <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
@@ -42,31 +54,45 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
 
     <div class="fdc__msgs" data-fdc-msgs data-lenis-prevent role="log" aria-live="polite">
       <div class="fdc__msg fdc__msg--bot">
+        <span class="fdc__msg-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+            <path
+              d="M12 2.5c.4 3.6 1.4 4.6 5 5-3.6.4-4.6 1.4-5 5-.4-3.6-1.4-4.6-5-5 3.6-.4 4.6-1.4 5-5Z"
+              fill="currentColor"></path>
+          </svg>
+        </span>
         <div class="fdc__bubble">
           Hi! I'm the Flowdira concierge. Ask me about our website design,
           development or AI work — or what a project might look like.
         </div>
       </div>
+
+      <div class="fdc__chips" data-fdc-chips>
+        {prompts.map((p) => (
+          <button class="fdc__chip" type="button" data-fdc-chip>{p}</button>
+        ))}
+      </div>
     </div>
 
     <form class="fdc__composer" data-fdc-form>
-      <textarea
-        class="fdc__input"
-        data-fdc-input
-        rows="1"
-        placeholder="Ask a question…"
-        aria-label="Type your message"
-        autocomplete="off"
-      ></textarea>
-      <button class="fdc__send" type="submit" data-fdc-send aria-label="Send message">
-        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-          <path d="M4 12l16-8-6 16-3-7-7-1z" stroke="currentColor" stroke-width="1.6"
-            stroke-linejoin="round"></path>
-        </svg>
-      </button>
+      <div class="fdc__field">
+        <textarea
+          class="fdc__input"
+          data-fdc-input
+          rows="1"
+          placeholder="Ask a question…"
+          aria-label="Type your message"
+          autocomplete="off"
+        ></textarea>
+        <button class="fdc__send" type="submit" data-fdc-send aria-label="Send message" disabled>
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <path d="M4 12l16-8-6 16-3-7-7-1z" stroke="currentColor" stroke-width="1.6"
+              stroke-linejoin="round" fill="currentColor"></path>
+          </svg>
+        </button>
+      </div>
+      <p class="fdc__footer">Powered by Flowdira AI</p>
     </form>
-
-    <p class="fdc__footer">Powered by Flowdira AI</p>
   </div>
 
   <!-- Launcher -->
@@ -121,8 +147,27 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     cursor: pointer;
     transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease);
   }
+  /* Finite attention pulse — draws the eye on load, then settles. */
+  .fdc__launch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgba(10, 114, 247, 0.5);
+    animation: fdc-pulse 2.4s var(--ease) 1.2s 3;
+    pointer-events: none;
+  }
+  .fdc.is-open .fdc__launch::before {
+    animation: none;
+  }
+  @keyframes fdc-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(10, 114, 247, 0.45); }
+    70% { box-shadow: 0 0 0 14px rgba(10, 114, 247, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(10, 114, 247, 0); }
+  }
   .fdc__launch:hover {
     transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 16px 38px -12px rgba(10, 114, 247, 0.62);
   }
   .fdc__launch:focus-visible {
     outline: 2px solid var(--blue-ink);
@@ -154,8 +199,8 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     bottom: 4.5rem;
     display: flex;
     flex-direction: column;
-    width: min(23rem, calc(100vw - 2rem));
-    height: min(31rem, calc(100vh - 7rem));
+    width: min(24rem, calc(100vw - 2rem));
+    height: min(33rem, calc(100vh - 7rem));
     background: var(--paper-raised);
     border: 1px solid var(--hairline);
     border-radius: var(--r-lg);
@@ -183,21 +228,34 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    padding: 0.9rem 1rem;
+    padding: 0.85rem 0.95rem;
     background:
-      radial-gradient(120% 120% at 90% 0%, rgba(22, 160, 250, 0.22), transparent 60%),
+      radial-gradient(130% 130% at 88% -10%, rgba(22, 160, 250, 0.28), transparent 58%),
       var(--forest);
     color: var(--on-forest);
+    border-bottom: 1px solid rgba(237, 231, 216, 0.08);
   }
   .fdc__avatar {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 2.2rem;
     flex-shrink: 0;
     border-radius: var(--r-pill);
-    background: rgba(22, 160, 250, 0.16);
+    background: linear-gradient(140deg, rgba(22, 160, 250, 0.28), rgba(10, 114, 247, 0.16));
     color: var(--blue-bright);
+    box-shadow: inset 0 0 0 1px rgba(22, 160, 250, 0.3);
+  }
+  .fdc__avatar-dot {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 2px var(--forest);
   }
   .fdc__head-text {
     flex: 1;
@@ -205,14 +263,28 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
   }
   .fdc__title {
     font-family: var(--font-display);
-    font-size: 0.98rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: -0.01em;
   }
   .fdc__status {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     font-size: 0.74rem;
     color: var(--on-forest-mut);
     margin-top: 1px;
+  }
+  .fdc__status-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: fdc-breathe 2.4s var(--ease) infinite;
+  }
+  @keyframes fdc-breathe {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.82); }
   }
   .fdc__close {
     display: grid;
@@ -238,15 +310,35 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
   .fdc__msgs {
     flex: 1;
     overflow-y: auto;
-    padding: 1rem;
+    overscroll-behavior: contain;
+    padding: 1.1rem 0.95rem;
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .fdc__msgs::-webkit-scrollbar {
+    width: 8px;
+  }
+  .fdc__msgs::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: var(--r-pill);
+  }
+  .fdc__msgs::-webkit-scrollbar-track {
+    background: transparent;
   }
   .fdc__msg {
     display: flex;
-    max-width: 85%;
+    align-items: flex-end;
+    gap: 0.45rem;
+    max-width: 88%;
+    animation: fdc-rise 0.34s var(--ease) both;
+  }
+  @keyframes fdc-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .fdc__msg--bot {
     align-self: flex-start;
@@ -254,8 +346,19 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
   .fdc__msg--user {
     align-self: flex-end;
   }
+  .fdc__msg-avatar {
+    display: grid;
+    place-items: center;
+    width: 1.55rem;
+    height: 1.55rem;
+    flex-shrink: 0;
+    border-radius: var(--r-pill);
+    background: var(--blue-soft);
+    color: var(--blue);
+    box-shadow: inset 0 0 0 1px var(--blue-line);
+  }
   .fdc__bubble {
-    padding: 0.6rem 0.85rem;
+    padding: 0.62rem 0.85rem;
     border-radius: var(--r-md);
     font-size: 0.9rem;
     line-height: 1.55;
@@ -271,6 +374,7 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     background: var(--forest);
     color: var(--on-forest);
     border-bottom-right-radius: var(--r-xs);
+    box-shadow: var(--shadow-card);
   }
   .fdc__bubble a {
     color: var(--blue-deep);
@@ -283,18 +387,54 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     font-weight: 600;
   }
   .fdc__bubble--error {
-    background: rgba(181, 103, 63, 0.12);
-    color: var(--clay);
+    background: rgba(181, 103, 63, 0.12) !important;
+    color: var(--clay) !important;
+  }
+
+  /* ---- Suggested prompt chips ---- */
+  .fdc__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.15rem 0 0.1rem 2rem;
+    animation: fdc-rise 0.34s var(--ease) 0.08s both;
+  }
+  .fdc__chips.is-hidden {
+    display: none;
+  }
+  .fdc__chip {
+    padding: 0.42rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    color: var(--blue-ink);
+    background: var(--paper-raised);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    transition:
+      transform 0.2s var(--ease),
+      background 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+  .fdc__chip:hover {
+    transform: translateY(-1px);
+    background: var(--blue-soft);
+    border-color: var(--blue);
+  }
+  .fdc__chip:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
   }
 
   /* typing dots */
   .fdc__dots {
     display: inline-flex;
     gap: 3px;
+    padding: 0.1rem 0;
   }
   .fdc__dots span {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--muted-2);
     animation: fdc-bounce 1.2s var(--ease) infinite;
@@ -312,49 +452,64 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
 
   /* ---- Composer ---- */
   .fdc__composer {
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
-    padding: 0.7rem;
+    padding: 0.7rem 0.8rem 0.55rem;
     border-top: 1px solid var(--hairline);
     background: var(--paper-raised);
+  }
+  .fdc__field {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.4rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.7rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .fdc__field:focus-within {
+    border-color: var(--blue-line);
+    box-shadow: 0 0 0 3px var(--blue-soft);
   }
   .fdc__input {
     flex: 1;
     resize: none;
     max-height: 6rem;
-    padding: 0.55rem 0.7rem;
+    padding: 0.4rem 0;
     font-family: inherit;
     font-size: 0.9rem;
     line-height: 1.45;
     color: var(--ink);
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-sm);
-    transition: border-color 0.25s var(--ease);
+    background: transparent;
+    border: none;
   }
   .fdc__input:focus {
     outline: none;
-    border-color: var(--blue-line);
+  }
+  .fdc__input::placeholder {
+    color: var(--muted-2);
   }
   .fdc__send {
     display: grid;
     place-items: center;
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.3rem;
+    height: 2.3rem;
     flex-shrink: 0;
     border: none;
     border-radius: var(--r-sm);
     color: #fff;
     background: var(--blue-grad);
     cursor: pointer;
-    transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+    transition:
+      transform 0.25s var(--ease-spring),
+      opacity 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
   }
-  .fdc__send:hover:not(:disabled) {
-    transform: translateY(-1px);
+  .fdc__send:not(:disabled):hover {
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: var(--blue-glow);
   }
   .fdc__send:disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: not-allowed;
   }
   .fdc__send:focus-visible {
@@ -364,9 +519,10 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
 
   .fdc__footer {
     text-align: center;
-    font-size: 0.68rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
     color: var(--muted-2);
-    padding-bottom: 0.55rem;
+    margin-top: 0.5rem;
   }
 
   /* ---- Mobile: full-height sheet ---- */
@@ -376,6 +532,7 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
       inset: 0;
       width: 100%;
       height: 100%;
+      height: 100dvh;
       border-radius: 0;
       bottom: 0;
     }
@@ -386,11 +543,20 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     .fdc__launch,
     .fdc__launch-icon,
     .fdc__panel,
-    .fdc__send {
+    .fdc__send,
+    .fdc__chip,
+    .fdc__msg,
+    .fdc__chips {
       transition: none;
+      animation: none;
     }
+    .fdc__launch::before,
+    .fdc__status-dot,
     .fdc__dots span {
       animation: none;
+    }
+    .fdc__msgs {
+      scroll-behavior: auto;
     }
   }
 </style>
@@ -402,6 +568,12 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
   const MAX_HISTORY = 10;
   const STORE_KEY = "fdc:history";
 
+  /* Brand sparkle, reused for every bot message avatar. */
+  const AVATAR_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" width="14" height="14" aria-hidden="true">' +
+    '<path d="M12 2.5c.4 3.6 1.4 4.6 5 5-3.6.4-4.6 1.4-5 5-.4-3.6-1.4-4.6-5-5 3.6-.4 4.6-1.4 5-5Z" fill="currentColor"></path>' +
+    "</svg>";
+
   const root = document.querySelector<HTMLElement>("[data-fdc]");
   if (root) {
     const api = (root.dataset.api ?? "").replace(/\/+$/, "");
@@ -409,6 +581,7 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     const launch = root.querySelector<HTMLButtonElement>("[data-fdc-launch]")!;
     const closeBtn = root.querySelector<HTMLButtonElement>("[data-fdc-close]")!;
     const msgs = root.querySelector<HTMLElement>("[data-fdc-msgs]")!;
+    const chips = root.querySelector<HTMLElement>("[data-fdc-chips]");
     const form = root.querySelector<HTMLFormElement>("[data-fdc-form]")!;
     const input = root.querySelector<HTMLTextAreaElement>("[data-fdc-input]")!;
     const sendBtn = root.querySelector<HTMLButtonElement>("[data-fdc-send]")!;
@@ -455,8 +628,16 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
     }
 
     function addBubble(role: Role | "error"): HTMLElement {
+      const isUser = role === "user";
       const wrap = document.createElement("div");
-      wrap.className = `fdc__msg fdc__msg--${role === "user" ? "user" : "bot"}`;
+      wrap.className = `fdc__msg fdc__msg--${isUser ? "user" : "bot"}`;
+      if (!isUser) {
+        const av = document.createElement("span");
+        av.className = "fdc__msg-avatar";
+        av.setAttribute("aria-hidden", "true");
+        av.innerHTML = AVATAR_SVG;
+        wrap.appendChild(av);
+      }
       const bubble = document.createElement("div");
       bubble.className = "fdc__bubble" + (role === "error" ? " fdc__bubble--error" : "");
       wrap.appendChild(bubble);
@@ -473,6 +654,12 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
         const bubble = addBubble(m.role);
         bubble.innerHTML = formatHtml(m.content);
       }
+    }
+    function hideChips() {
+      chips?.classList.add("is-hidden");
+    }
+    function syncSend() {
+      sendBtn.disabled = streaming || input.value.trim() === "";
     }
 
     // ---- open / close ----
@@ -504,10 +691,21 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
       if (e.key === "Escape" && root!.classList.contains("is-open")) closePanel();
     });
 
+    // ---- suggested prompts ----
+    chips?.querySelectorAll<HTMLButtonElement>("[data-fdc-chip]").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        input.value = chip.textContent?.trim() ?? "";
+        syncSend();
+        hideChips();
+        form.requestSubmit();
+      });
+    });
+
     // ---- input ergonomics ----
     input.addEventListener("input", () => {
       input.style.height = "auto";
       input.style.height = Math.min(input.scrollHeight, 96) + "px";
+      syncSend();
     });
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -521,6 +719,7 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
       e.preventDefault();
       const text = input.value.trim();
       if (!text || streaming) return;
+      hideChips();
       if (!api) {
         const b = addBubble("error");
         b.textContent = "Chat isn't configured yet. Please email contact@flowdira.com.";
@@ -533,11 +732,12 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
       userBubble.textContent = text;
       input.value = "";
       input.style.height = "auto";
+      syncSend();
       saveHistory();
 
       // assistant placeholder with typing dots
       streaming = true;
-      sendBtn.disabled = true;
+      syncSend();
       const botBubble = addBubble("assistant");
       botBubble.innerHTML =
         '<span class="fdc__dots"><span></span><span></span><span></span></span>';
@@ -603,12 +803,13 @@ const apiUrl = import.meta.env.PUBLIC_CHAT_API_URL ?? "";
           "Connection lost. Please try again or email contact@flowdira.com.";
       } finally {
         streaming = false;
-        sendBtn.disabled = false;
+        syncSend();
         scrollToEnd();
       }
     });
 
     // hydrate prior conversation (if any) on load
+    if (history.length) hideChips();
     renderHistory();
   }
 </script>
