@@ -38,7 +38,7 @@ never code.
 | `ALLOWED_ORIGINS` | `wrangler.toml [vars]` | comma-separated browser origins allowed to call the Worker |
 | `MAX_TOKENS` / `RATE_LIMIT_PER_MIN` / `MAX_MESSAGE_CHARS` / `MAX_HISTORY` | `[vars]` | cost/abuse caps |
 
-Current default provider: **Groq** (`llama-3.1-8b-instant`).
+Current default provider: **Groq** (`llama-3.3-70b-versatile`).
 
 ### Swapping providers
 1. Edit `LLM_BASE_URL` + `LLM_MODEL` in `wrangler.toml` (e.g. OpenAI
@@ -95,8 +95,8 @@ answer only from the knowledge and defer unknowns to `contact@flowdira.com`.
 
 ## Notes on model choice
 
-`llama-3.1-8b-instant` is fast and cheap and follows the grounding rules well
-(e.g. it won't invent prices). Being a small model, it's a bit soft on strict
-scope refusals (it may still answer a clearly off-topic request). For tighter
-guardrails, switch `LLM_MODEL` to a stronger model (e.g. Groq's
-`llama-3.3-70b-versatile`) — config-only, no code change.
+Default is `llama-3.3-70b-versatile` — it follows the grounding rules well
+(won't invent prices) and holds scope firmly (declines clearly off-topic
+requests instead of answering them). If you want lower latency/cost and can
+accept softer off-topic refusals, switch `LLM_MODEL` to `llama-3.1-8b-instant`
+— config-only, no code change.
