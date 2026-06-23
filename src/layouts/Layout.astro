@@ -5,6 +5,7 @@ import "@fontsource-variable/hanken-grotesk";
 import "lenis/dist/lenis.css";
 import "../styles/global.css";
 import ChatWidget from "../components/ChatWidget.astro";
+import BookDemoModal from "../components/BookDemoModal.astro";
 
 export interface Props {
   title?: string;
@@ -148,6 +149,7 @@ const jsonLd = {
     <div class="scroll-progress" aria-hidden="true"></div>
     <slot />
     <ChatWidget />
+    <BookDemoModal />
 
     <script>
       import Lenis from "lenis";
