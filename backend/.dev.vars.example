@@ -9,7 +9,13 @@
 
 LLM_API_KEY="sk-your-key-here"
 
+# Book a demo — Resend transactional email API key (https://resend.com).
+# In production: wrangler secret put RESEND_API_KEY
+RESEND_API_KEY="re_your-key-here"
+
 # Optional local overrides (uncomment to change provider/model locally):
 # LLM_BASE_URL="https://api.openai.com/v1"
 # LLM_MODEL="gpt-4o-mini"
 # ALLOWED_ORIGINS="http://localhost:4321"
+# DEMO_FROM="Flowdira <onboarding@resend.dev>"
+# DEMO_TO="you@example.com"   # in Resend test mode this must be your account email

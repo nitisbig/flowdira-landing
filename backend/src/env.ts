@@ -24,6 +24,18 @@ export interface Env {
   MAX_HISTORY: string;
   /** Native Workers rate-limit binding (configured in wrangler.toml). */
   CHAT_RATE_LIMITER: RateLimit;
+
+  // ---- Book a demo (Resend email) ----
+  /** Resend API key (Bearer token) — secret. */
+  RESEND_API_KEY: string;
+  /** Inbox that receives demo-booking notifications. */
+  DEMO_TO: string;
+  /** Verified sender, e.g. "Flowdira <demo@flowdira.com>". */
+  DEMO_FROM: string;
+  /** Max characters allowed in the project-details message (string; parsed). */
+  MAX_DEMO_MESSAGE_CHARS: string;
+  /** Native Workers rate-limit binding for the booking endpoint. */
+  DEMO_RATE_LIMITER: RateLimit;
 }
 
 /**

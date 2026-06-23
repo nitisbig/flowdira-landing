@@ -87,8 +87,10 @@ deploy. The latest LLMs for AI features.
 
 # Contact / next step
 
-The way to start or get a quote is to reach out at **contact@flowdira.com**
-(or the "Start a project" / contact button on the site, which opens the same
-email). There is no public phone number or pricing page — email is the entry
-point.
+The best way to start or get a quote is to **book a demo** — click any
+"Book a demo" button on the site to open a short form (name, email, what you
+need, and a few project details). Flowdira replies within one business day with
+ideas, a timeline and a fixed quote. You can also email **contact@flowdira.com**
+directly. There is no public phone number or pricing page — booking a demo or
+email is the entry point.
 `.trim();

@@ -11,6 +11,7 @@
 import type { Env } from "./env";
 import { corsHeaders, isAllowedOrigin, parseAllowedOrigins } from "./cors";
 import { parseConfig, validateMessages } from "./chat";
+import { parseDemoConfig, validateDemo, sendDemoEmails } from "./demo";
 import { buildSystemPrompt } from "./system-prompt";
 import { transformUpstreamSSE } from "./stream";
 
@@ -60,9 +61,43 @@ export default {
       return jsonResponse({ error: "forbidden" }, 403);
     }
     const cors = corsHeaders(origin);
-
-    // Rate limit per client IP (native GA binding).
     const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+
+    // ---- Book a demo: validate -> email via Resend (own rate limiter) ----
+    if (url.pathname === "/book-demo") {
+      const { success } = await env.DEMO_RATE_LIMITER.limit({ key: ip });
+      if (!success) {
+        return jsonResponse(
+          { error: "rate_limited", message: "You're going a bit fast — try again in a moment." },
+          429,
+          cors,
+        );
+      }
+      let demoBody: unknown;
+      try {
+        demoBody = await request.json();
+      } catch {
+        return jsonResponse({ error: "invalid_json" }, 400, cors);
+      }
+      const demo = validateDemo(demoBody, parseDemoConfig(env));
+      if (!demo.ok) {
+        return jsonResponse({ error: "invalid_request", message: demo.error }, 400, cors);
+      }
+      // Honeypot tripped — accept silently, send nothing.
+      if (demo.bot) return jsonResponse({ ok: true }, 200, cors);
+
+      const sent = await sendDemoEmails(env, demo.data);
+      return sent
+        ? jsonResponse({ ok: true }, 200, cors)
+        : jsonResponse(
+            { error: "email_failed", message: `Something went wrong sending your request. Please email ${CONTACT}.` },
+            502,
+            cors,
+          );
+    }
+
+    // ---- Chat completions (default POST) ----
+    // Rate limit per client IP (native GA binding).
     const { success } = await env.CHAT_RATE_LIMITER.limit({ key: ip });
     if (!success) {
       return jsonResponse(

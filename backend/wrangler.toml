@@ -17,6 +17,13 @@ RATE_LIMIT_PER_MIN = "20"
 MAX_MESSAGE_CHARS = "1500"
 MAX_HISTORY = "10"
 
+# Book a demo (Resend). RESEND_API_KEY is a secret: `wrangler secret put RESEND_API_KEY`
+# (local: .dev.vars). DEMO_FROM must be on a Resend-verified domain — until
+# flowdira.com is verified, keep onboarding@resend.dev (owner notification only).
+DEMO_TO = "contact@flowdira.com"
+DEMO_FROM = "Flowdira <onboarding@resend.dev>"
+MAX_DEMO_MESSAGE_CHARS = "2000"
+
 # Native rate limiting (GA). `period` must be 10 or 60 (seconds).
 # `limit` here is the hard cap per period; RATE_LIMIT_PER_MIN above mirrors it
 # for code-side messaging. Keep them in sync if you change the value.
@@ -24,3 +31,9 @@ MAX_HISTORY = "10"
 name = "CHAT_RATE_LIMITER"
 namespace_id = "1001"
 simple = { limit = 20, period = 60 }
+
+# Tighter limiter for the booking form — submissions are rare; this throttles spam.
+[[ratelimits]]
+name = "DEMO_RATE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }
